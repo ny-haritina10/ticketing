@@ -5,7 +5,6 @@ import annotation.AnnotationGetMapping;
 import annotation.AnnotationModelAttribute;
 import annotation.AnnotationPostMapping;
 import annotation.AnnotationURL;
-import annotation.Auth;
 import model.Admin;
 import modelview.ModelView;
 import session.Session;
