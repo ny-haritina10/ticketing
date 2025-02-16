@@ -22,37 +22,37 @@ public class AuthController {
         return mv;
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/admin_login")
-    public ModelView adminLogin(@Valid @AnnotationModelAttribute("admin") Admin admin) {
-        try {
-            // hardcoded value 
-            String email = "admin@gmail.com";
-            String password = "admin";
+    // @AnnotationPostMapping
+    // @AnnotationURL("/admin_login")
+    // public ModelView adminLogin(@Valid @AnnotationModelAttribute("admin") Admin admin) {
+    //     try {
+    //         // hardcoded value 
+    //         String email = "admin@gmail.com";
+    //         String password = "admin";
 
-            if (admin.getEmail().equals(email) && admin.getPassword().equals(password)) {
-                ModelView mv = new ModelView("success-admin.jsp");
-                mv.add("role", "Admin");
+    //         if (admin.getEmail().equals(email) && admin.getPassword().equals(password)) {
+    //             ModelView mv = new ModelView("success-admin.jsp");
+    //             mv.add("role", "Admin");
 
-                // set admin as session
-                session.login(Admin.class);
+    //             // set admin as session
+    //             session.login(Admin.class);
 
-                return mv;
-            }
+    //             return mv;
+    //         }
 
-            else {
-                ModelView mv = new ModelView("error-login.jsp");
-                mv.add("message", "Error login credentials");
+    //         else {
+    //             ModelView mv = new ModelView("error-login.jsp");
+    //             mv.add("message", "Error login credentials");
 
-                return mv;
-            }
-        } 
+    //             return mv;
+    //         }
+    //     } 
         
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+    //     catch (Exception e) {
+    //         e.printStackTrace();
+    //         return null;
+    //     }
+    // }
 
     @AnnotationGetMapping
     @AnnotationURL("/logout")

@@ -1,4 +1,3 @@
--- Create enum for seat categories
 CREATE TYPE seat_category AS ENUM ('Economy', 'Business', 'First Class');
 
 -- Planes table
