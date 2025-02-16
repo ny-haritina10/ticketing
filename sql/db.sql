@@ -88,3 +88,7 @@ CREATE TABLE reservations (
     cancellation_time TIMESTAMP WITH TIME ZONE,
     CHECK (cancellation_time IS NULL OR cancellation_time > reservation_time)
 );
+
+-- Static Data
+INSERT INTO admins (id, email, password_hash) 
+VALUES (1, 'admin@gmail.com', 'admin');

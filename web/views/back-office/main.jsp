@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Back-Office</title>
 </head>
 <body>
-  <h1>Error login</h1>
-
-  <h3>${ message }</h3>
+  <h1>Hello Admin !</h1>
 </body>
 </html>
