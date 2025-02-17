@@ -92,3 +92,93 @@ CREATE TABLE reservations (
 -- Static Data
 INSERT INTO admins (id, email, password_hash) 
 VALUES (1, 'admin@gmail.com', 'admin');
+
+INSERT INTO planes (id, model_name, fabrication_date)
+VALUES (1, 'Boeing 513', '2010-01-01');
+
+INSERT INTO planes (id, model_name, fabrication_date)
+VALUES (2, 'Airbus A320', '2015-06-01');
+
+INSERT INTO planes (id, model_name, fabrication_date)
+VALUES (3, 'Boeing 787 Dreamliner', '2012-03-15');
+
+INSERT INTO planes (id, model_name, fabrication_date)
+VALUES (4, 'Bombardier CRJ900', '2008-09-20');
+
+INSERT INTO planes (id, model_name, fabrication_date)
+VALUES (5, 'Embraer ERJ145', '2006-11-10');
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (1, 1, 'Economy', 75);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (2, 1, 'Business', 45);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (3, 1, 'First Class', 25);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (4, 2, 'Economy', 100);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (5, 2, 'Business', 50);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (6, 2, 'First Class', 30);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (7, 3, 'Economy', 100);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (8, 3, 'Business', 50);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (9, 3, 'First Class', 30);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (10, 4, 'Economy', 100);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (11, 4, 'Business', 50);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (12, 4, 'First Class', 30);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (13, 5, 'Economy', 100);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (14, 5, 'Business', 50);
+
+INSERT INTO seat_configurations (id, id_plane, category, number_of_seats)
+VALUES (15, 5, 'First Class', 30);
+
+INSERT INTO cities (id, city_name, country)
+VALUES (1, 'New York', 'USA');
+
+INSERT INTO cities (id, city_name, country)
+VALUES (2, 'London', 'United Kingdom');
+
+INSERT INTO cities (id, city_name, country)
+VALUES (3, 'Paris', 'France');
+
+INSERT INTO cities (id, city_name, country)
+VALUES (4, 'Tokyo', 'Japan');
+
+INSERT INTO cities (id, city_name, country)
+VALUES (5, 'Sydney', 'Australia');
+
+INSERT INTO cities (id, city_name, country)
+VALUES (6, 'Beijing', 'China');
+
+INSERT INTO cities (id, city_name, country)
+VALUES (7,'Mumbai','India');
+
+INSERT INTO cities (id ,city_name ,country )
+VALUES(8,'Cairo','Egypt' );
+
+INSERT INTO cities(id ,city_name ,country )
+VALUES(9,'São Paulo','Brazil' );
+
+INSERT INTO cities(id ,city_name ,country )
+VALUES(10,'Moscow','Russia');

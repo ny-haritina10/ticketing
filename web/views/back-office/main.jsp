@@ -7,5 +7,9 @@
 </head>
 <body>
   <h1>Hello Admin !</h1>
+
+  <a href="admin/flights/form">Insert Flights</a>
+  <a href="admin/flights/list">List Flights</a>
+  <a href="logout">Logout</a>
 </body>
 </html>

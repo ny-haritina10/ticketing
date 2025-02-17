@@ -19,19 +19,11 @@ public class AuthController {
     
     private Session session;
 
-    @AnnotationGetMapping
-    @AnnotationURL("/auth_form")
-    public ModelView authForm() {
-        ModelView mv = new ModelView("auth.jsp");
-        return mv;
-    }
-
     @AnnotationPostMapping
     @AnnotationURL("/admin_login")
     public ModelView adminLogin(@Valid @AnnotationModelAttribute("admin") Admin admin) {
 
-        try {
-            Connection connection = new Database().getConnection();
+        try (Connection connection = new Database().getConnection()){
             boolean auth = AdminService.auth(connection, admin);
             
             if (auth) {
