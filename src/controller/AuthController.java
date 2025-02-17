@@ -27,7 +27,12 @@ public class AuthController {
             boolean auth = AdminService.auth(connection, admin);
             
             if (auth) {
-                ModelView mv = new ModelView("views/back-office/main.jsp");
+                ModelView mv = new ModelView("main.jsp");
+
+                // Add template parameters
+                mv.add("activePage", "dashboard");
+                mv.add("contentPage", "dashboard.jsp");
+                mv.add("pageTitle", "Dashboard");
 
                 // set admin session 
                 session.login(Admin.class);
@@ -35,7 +40,7 @@ public class AuthController {
             }
 
             else {
-                ModelView mv = new ModelView("views/errors/error-login.jsp");
+                ModelView mv = new ModelView("error-login.jsp");
                 mv.add("message", "Please verify your admin credentials!");
 
                 return mv;
@@ -56,5 +61,17 @@ public class AuthController {
         // clear login session
         session.logout();
         return new ModelView("index.jsp");
+    }
+
+    @AnnotationGetMapping
+    @AnnotationURL("/admin")
+    public ModelView dashboard() {
+        ModelView mv = new ModelView("main.jsp");
+
+        mv.add("activePage", "dashboard");
+        mv.add("contentPage", "dashboard.jsp");
+        mv.add("pageTitle", "Dashboard");
+
+        return mv;
     }
 }
