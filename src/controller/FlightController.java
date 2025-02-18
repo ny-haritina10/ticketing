@@ -18,6 +18,7 @@ import model.City;
 import model.Flight;
 import model.FlightPrice;
 import model.FlightPromotion;
+import model.FlightReservation;
 import model.Plane;
 
 import modelview.ModelView;
@@ -319,7 +320,6 @@ public class FlightController {
         }
     }
 
-
     @AnnotationGetMapping
     @AnnotationURL("/delete_promotion")
     public ModelView deletePromotion(@AnnotationRequestParam(name = "id") Integer id) {
@@ -329,6 +329,81 @@ public class FlightController {
                 promotion.delete(connection);
             }
             return listPromotions();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @AnnotationGetMapping
+    @AnnotationURL("/form_reservation_setting")
+    public ModelView redirectToReservationForm() {
+        try (Connection connection = new Database().getConnection()){
+            // Create ModelView with main template
+            ModelView mv = new ModelView(MAIN_TEMPLATE);
+            
+            Flight[] flights = Flight.getAll(connection, Flight.class);
+
+            // Add data for the form
+            mv.add("flights", flights);
+            
+            // Add template parameters
+            mv.add("activePage", "insert_reservation");
+            mv.add("contentPage", "form-reservation-setting.jsp");
+            mv.add("pageTitle", "Insert Flight Reservation Setting");
+
+            return mv;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @AnnotationPostMapping
+    @AnnotationURL("/insert_reservation_setting")
+    public ModelView insertReservation(
+        @AnnotationModelAttribute(value = "flight_reservation") FlightReservation reservation
+    ) {
+        try (Connection connection = new Database().getConnection()) {
+            reservation.save(connection);
+            return listReservations(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @AnnotationGetMapping
+    @AnnotationURL("/list_reservations_setting")
+    public ModelView listReservations() {
+        try (Connection connection = new Database().getConnection()) {
+            // Create ModelView with main template
+            ModelView mv = new ModelView(MAIN_TEMPLATE);
+            
+            FlightReservation[] reservations = FlightReservation.getAll(connection, FlightReservation.class);
+            mv.add("reservations", reservations);
+            
+            // Add template parameters
+            mv.add("activePage", "list_reservations");
+            mv.add("contentPage", "list-reservation-setting.jsp");
+            mv.add("pageTitle", "Flight Reservation Settings List");
+            
+            return mv;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @AnnotationGetMapping
+    @AnnotationURL("/delete_reservation_setting")
+    public ModelView deleteReservation(@AnnotationRequestParam(name = "id") Integer id) {
+        try (Connection connection = new Database().getConnection()) {
+            FlightReservation reservation = FlightReservation.findById(connection, FlightReservation.class, id);
+            if (reservation != null) {
+                reservation.delete(connection);
+            }
+            return listReservations();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

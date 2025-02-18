@@ -9,8 +9,10 @@ import annotation.AnnotationPostMapping;
 import annotation.AnnotationURL;
 import database.Database;
 import model.Admin;
+import model.Client;
 import modelview.ModelView;
 import service.AdminService;
+import service.ClientService;
 import session.Session;
 import validation.Valid;
 
@@ -73,5 +75,45 @@ public class AuthController {
         mv.add("pageTitle", "Dashboard");
 
         return mv;
+    }
+
+    @AnnotationGetMapping
+    @AnnotationURL("/login_client")
+    public ModelView loginClient() {
+        ModelView mv = new ModelView("front-office.jsp");
+        return mv;
+    }
+
+    @AnnotationPostMapping
+    @AnnotationURL("/client_login")
+    public ModelView authLogin(@AnnotationModelAttribute(value = "client") Client client) {
+
+        System.out.println(client.getEmail());
+        System.out.println(client.getPassword());
+
+        try (Connection connection = new Database().getConnection()){
+            boolean auth = ClientService.auth(connection, client);
+            
+            if (auth) {
+                ModelView mv = new ModelView("main-1.jsp");
+
+                // set admin session 
+                session.login(Client.class);
+                return mv;
+            }
+
+            else {
+                ModelView mv = new ModelView("error-login.jsp");
+                mv.add("message", "Please verify your client credentials!");
+
+                return mv;
+            }
+        } 
+        
+        catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return null;
+        }
     }
 }

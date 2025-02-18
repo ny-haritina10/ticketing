@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | Ticketing App</title>
+    <title>Front-Office Login | Ticketing App</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -67,11 +67,11 @@
 </head>
 <body>
     <div class="login-container">
-        <h2><i class="fas fa-plane-departure"></i> Back-Office </h2>
-        <form action="admin_login" method="post">
+        <h2><i class="fas fa-plane-departure"></i> Front-Office </h2>
+        <form action="client_login" method="post">
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" name="email" placeholder="Email" required>
+                <input type="text" name="email" placeholder="User email" required>
             </div>
             <div class="input-group">
                 <i class="fas fa-lock"></i>
@@ -80,7 +80,7 @@
             <button type="submit" class="login-btn">Login</button>
         </form> <br>
 
-        <a href="login_client">Front-Office</a>
+        <a href="index.jsp">Back-Office</a>
     </div>
 </body>
 </html>

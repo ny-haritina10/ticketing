@@ -374,9 +374,16 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="${pageContext.request.contextPath}/list_promotions" class="sidebar-link ${activePage == 'list_promotions ? 'active' : ''}">
+          <a href="${pageContext.request.contextPath}/list_promotions" class="sidebar-link ${activePage == 'list_promotions' ? 'active' : ''}">            
             <i class="fas fa-list"></i>
             <span>Promotions</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="${pageContext.request.contextPath}/list_reservations_setting" class="sidebar-link ${activePage == 'list_reservations_setting' ? 'active' : ''}">            
+            <i class="fas fa-list"></i>
+            <span>Reservations</span>
           </a>
         </li>
       </ul>

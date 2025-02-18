@@ -197,3 +197,20 @@ ALTER COLUMN category TYPE VARCHAR(255) USING category::VARCHAR(255);
 -- Alter seat_category column in reservations table
 ALTER TABLE reservations 
 ALTER COLUMN seat_category TYPE VARCHAR(255) USING seat_category::VARCHAR(255);
+
+-- 
+INSERT INTO clients (id, name, email, password_hash)
+VALUES (1, 'Client 1', 'client1@gmail.com', 'client1');
+
+INSERT INTO clients (id, name, email, password_hash)
+VALUES (2, 'Client 2', 'client2@gmail.com', 'client2');
+
+INSERT INTO clients (id, name, email, password_hash)
+VALUES (3, 'Client 3', 'client3@gmail.com', 'client3');
+
+CREATE TABLE flight_reservation (
+    id SERIAL PRIMARY KEY,
+    id_flight INTEGER REFERENCES flights(id) ON DELETE RESTRICT,
+    reservation_hour_allowed INTEGER NOT NULL,
+    annulation_hour_allowed INTEGER NOT NULL  
+);

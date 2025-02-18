@@ -20,10 +20,4 @@
     <h3 class="card-title">Routes</h3>
     <p class="card-subtitle">312 active routes</p>
   </div>
-  
-  <div class="card">
-    <i class="fas fa-bell"></i>
-    <h3 class="card-title">Alerts</h3>
-    <p class="card-subtitle">2 new alerts</p>
-  </div>
 </div>
