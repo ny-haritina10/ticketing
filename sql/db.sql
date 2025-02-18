@@ -1,5 +1,3 @@
-CREATE TYPE seat_category AS ENUM ('Economy', 'Business', 'First Class');
-
 -- Planes table
 CREATE TABLE planes (
     id SERIAL PRIMARY KEY,
@@ -182,3 +180,20 @@ VALUES(9,'São Paulo','Brazil' );
 
 INSERT INTO cities(id ,city_name ,country )
 VALUES(10,'Moscow','Russia');
+
+
+-- Alter category column in seat_configurations table
+ALTER TABLE seat_configurations 
+ALTER COLUMN category TYPE VARCHAR(255) USING category::VARCHAR(255);
+
+-- Alter category column in flight_prices table
+ALTER TABLE flight_prices 
+ALTER COLUMN category TYPE VARCHAR(255) USING category::VARCHAR(255);
+
+-- Alter category column in flight_promotions table
+ALTER TABLE flight_promotions 
+ALTER COLUMN category TYPE VARCHAR(255) USING category::VARCHAR(255);
+
+-- Alter seat_category column in reservations table
+ALTER TABLE reservations 
+ALTER COLUMN seat_category TYPE VARCHAR(255) USING seat_category::VARCHAR(255);

@@ -67,7 +67,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h2><i class="fas fa-plane-departure"></i> Back-Office Login</h2>
+        <h2><i class="fas fa-plane-departure"></i> Back-Office </h2>
         <form action="admin_login" method="post">
             <div class="input-group">
                 <i class="fas fa-user"></i>

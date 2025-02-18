@@ -367,15 +367,16 @@
           </a>
         </li>
         <li class="sidebar-item">
-          <a href="${pageContext.request.contextPath}/form" class="sidebar-link ${activePage == 'insert_flight' ? 'active' : ''}">
-            <i class="fas fa-plus-circle"></i>
-            <span>Insert Flights</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
           <a href="${pageContext.request.contextPath}/list" class="sidebar-link ${activePage == 'list_flight' ? 'active' : ''}">
             <i class="fas fa-list"></i>
-            <span>List Flights</span>
+            <span>Flights</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="${pageContext.request.contextPath}/list_promotions" class="sidebar-link ${activePage == 'list_promotions ? 'active' : ''}">
+            <i class="fas fa-list"></i>
+            <span>Promotions</span>
           </a>
         </li>
       </ul>

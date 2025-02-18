@@ -1,9 +1,9 @@
 package model;
 
+import java.math.BigDecimal;
+
 import mg.jwe.orm.annotations.*;
 import mg.jwe.orm.base.BaseModel;
-
-import java.math.BigDecimal;
 
 @Table(name = "flight_promotions")
 public class FlightPromotion extends BaseModel {
