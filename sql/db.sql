@@ -214,3 +214,5 @@ CREATE TABLE flight_reservation (
     reservation_hour_allowed INTEGER NOT NULL,
     annulation_hour_allowed INTEGER NOT NULL  
 );
+
+ALTER TABLE clients ADD COLUMN passport_image VARCHAR(255);

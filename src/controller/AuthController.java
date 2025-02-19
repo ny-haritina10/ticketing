@@ -8,6 +8,7 @@ import annotation.AnnotationModelAttribute;
 import annotation.AnnotationPostMapping;
 import annotation.AnnotationURL;
 import database.Database;
+import mg.jwe.orm.criteria.Criterion;
 import model.Admin;
 import model.Client;
 import modelview.ModelView;
@@ -87,18 +88,22 @@ public class AuthController {
     @AnnotationPostMapping
     @AnnotationURL("/client_login")
     public ModelView authLogin(@AnnotationModelAttribute(value = "client") Client client) {
-
-        System.out.println(client.getEmail());
-        System.out.println(client.getPassword());
-
         try (Connection connection = new Database().getConnection()){
             boolean auth = ClientService.auth(connection, client);
             
             if (auth) {
                 ModelView mv = new ModelView("main-1.jsp");
 
+                Client cl = Client.findByCriteria(
+                    connection, 
+                    Client.class, 
+                    new Criterion("email", "=", client.getEmail())
+                )[0];
+
                 // set admin session 
                 session.login(Client.class);
+                session.add("connected_client", cl.getId());
+                
                 return mv;
             }
 

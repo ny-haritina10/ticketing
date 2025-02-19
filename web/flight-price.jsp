@@ -8,7 +8,6 @@
 <h3>Flight number: <%= flight.getFlightNumber() %></h3>
 
 <form action="configure_flight_price" method="post">
-  
   <input type="hidden" name="id" value="<%= flight.getId() %>">
 
   <%for (String category : seatCategories) {%>

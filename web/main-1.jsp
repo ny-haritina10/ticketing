@@ -228,30 +228,13 @@
           <div class="card-icon">
             <i class="fas fa-user-circle"></i>
           </div>
-          <h2 class="card-title">My Bookings</h2>
+          <h2 class="card-title">Passport Image Upload</h2>
         </div>
         <div class="card-body">
-          <p class="card-text">View your current reservations, check booking status, and manage your travel plans. Get real-time updates on any changes to your itinerary.</p>
+          <p class="card-text">Upload the image of your passport to facilitate your life.</p>
           <div class="card-action">
-            <a href="#" class="btn btn-primary">
-              <i class="fas fa-calendar-check"></i> View Bookings
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">
-            <i class="fas fa-headset"></i>
-          </div>
-          <h2 class="card-title">Customer Support</h2>
-        </div>
-        <div class="card-body">
-          <p class="card-text">Need assistance with your booking? Our customer support team is ready to help you with any questions or concerns about your travel arrangements.</p>
-          <div class="card-action">
-            <a href="#" class="btn btn-primary">
-              <i class="fas fa-comment-dots"></i> Get Help
+            <a href="form_passport" class="btn btn-primary">
+              <i class="fas fa-calendar-check"></i> Upload passport
             </a>
           </div>
         </div>

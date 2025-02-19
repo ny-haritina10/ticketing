@@ -358,36 +358,42 @@
           <span>Flight Admin</span>
         </a>
       </div>
-      
+    
       <ul class="sidebar-menu">
+        <!-- Dashboard -->
         <li class="sidebar-item">
           <a href="${pageContext.request.contextPath}/admin" class="sidebar-link ${activePage == 'dashboard' ? 'active' : ''}">
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
         </li>
+    
+        <!-- Flights -->
         <li class="sidebar-item">
           <a href="${pageContext.request.contextPath}/list" class="sidebar-link ${activePage == 'list_flight' ? 'active' : ''}">
-            <i class="fas fa-list"></i>
+            <i class="fas fa-plane"></i> <!-- Changed to a plane icon -->
             <span>Flights</span>
           </a>
         </li>
-
+    
+        <!-- Promotions -->
         <li class="sidebar-item">
-          <a href="${pageContext.request.contextPath}/list_promotions" class="sidebar-link ${activePage == 'list_promotions' ? 'active' : ''}">            
-            <i class="fas fa-list"></i>
+          <a href="${pageContext.request.contextPath}/list_promotions" class="sidebar-link ${activePage == 'list_promotions' ? 'active' : ''}">
+            <i class="fas fa-percent"></i> <!-- Changed to a percent icon for promotions -->
             <span>Promotions</span>
           </a>
         </li>
-
+    
+        <!-- Reservations -->
         <li class="sidebar-item">
-          <a href="${pageContext.request.contextPath}/list_reservations_setting" class="sidebar-link ${activePage == 'list_reservations_setting' ? 'active' : ''}">            
-            <i class="fas fa-list"></i>
+          <a href="${pageContext.request.contextPath}/list_reservations_setting" class="sidebar-link ${activePage == 'list_reservations_setting' ? 'active' : ''}">
+            <i class="fas fa-calendar-check"></i> <!-- Changed to a calendar check icon for reservations -->
             <span>Reservations</span>
           </a>
         </li>
       </ul>
-      
+    
+      <!-- Logout -->
       <div class="sidebar-footer">
         <a href="${pageContext.request.contextPath}/logout" class="logout-btn">
           <i class="fas fa-sign-out-alt"></i>
