@@ -239,6 +239,23 @@
           </div>
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <h2 class="card-title">Flight Reservation</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-text">Book your flight here.</p>
+          <div class="card-action">
+            <a href="form_reservation" class="btn btn-primary">
+              <i class="fas fa-calendar-check"></i> Reservation
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
     
     <div class="footer">

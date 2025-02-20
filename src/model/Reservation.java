@@ -4,7 +4,8 @@ import mg.jwe.orm.annotations.*;
 import mg.jwe.orm.base.BaseModel;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.sql.Timestamp;
 
 @Table(name = "reservations")
 public class Reservation extends BaseModel {
@@ -29,13 +30,13 @@ public class Reservation extends BaseModel {
     private BigDecimal pricePaid;
 
     @Column(name = "reservation_time")
-    private Date reservationTime;
+    private Timestamp reservationTime;
 
     @Column(name = "is_cancelled")
     private Boolean isCancelled;
 
     @Column(name = "cancellation_time")
-    private Date cancellationTime;
+    private Timestamp cancellationTime;
 
     public Integer getId() {
         return id;
@@ -85,11 +86,11 @@ public class Reservation extends BaseModel {
         this.pricePaid = pricePaid;
     }
 
-    public Date getReservationTime() {
+    public Timestamp getReservationTime() {
         return reservationTime;
     }
 
-    public void setReservationTime(Date reservationTime) {
+    public void setReservationTime(Timestamp reservationTime) {
         this.reservationTime = reservationTime;
     }
 
@@ -101,11 +102,11 @@ public class Reservation extends BaseModel {
         this.isCancelled = isCancelled;
     }
 
-    public Date getCancellationTime() {
+    public Timestamp getCancellationTime() {
         return cancellationTime;
     }
 
-    public void setCancellationTime(Date cancellationTime) {
+    public void setCancellationTime(Timestamp cancellationTime) {
         this.cancellationTime = cancellationTime;
     }    
 }

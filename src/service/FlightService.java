@@ -48,12 +48,10 @@ public class FlightService {
         return seatPrices;
     }
 
-    public static boolean isSeatCategoryPromotional(Connection connection, 
-                                           Flight flight, 
-                                           String seatCategory,
-                                           Timestamp reservationDateTime) 
+    public static boolean isSeatCategoryPromotional(Connection connection, Flight flight, String seatCategory,Timestamp reservationDateTime) 
         throws SQLException 
     {
+        // get all reservations based on the flight and the seat category
         Reservation[] reservations = Reservation.findByCriteria(
             connection, 
             Reservation.class, 
@@ -73,18 +71,16 @@ public class FlightService {
         int reservedSeat = reservations.length;
         int result = 0;
 
-        if (promotions.length == 0 || promotions == null) {
-            result += (0 - reservedSeat);
-        }
+        if (promotions.length == 0 || promotions == null) 
+        { result += (0 - reservedSeat); }
         
         else  
         { result += (promotions[0].getSeatsAvailable()) - reservedSeat; }
 
-        // System.out.println("in promotion: " + promotions[0].getSeatsAvailable());
         System.out.println("reserved seat: " + reservedSeat);
         System.out.println("result: " + result);
 
-        if (result <= 0) return true;
-        else return false;
+        if (result <= 0) return false;
+        else return true;
     }
 }
