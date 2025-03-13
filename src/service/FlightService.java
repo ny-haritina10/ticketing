@@ -77,9 +77,6 @@ public class FlightService {
         else  
         { result += (promotions[0].getSeatsAvailable()) - reservedSeat; }
 
-        System.out.println("reserved seat: " + reservedSeat);
-        System.out.println("result: " + result);
-
         if (result <= 0) return false;
         else return true;
     }

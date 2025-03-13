@@ -2,10 +2,13 @@ package model;
 
 import mg.jwe.orm.annotations.*;
 import mg.jwe.orm.base.BaseModel;
+import validation.NotNull;
+import validation.Valid;
 
 import java.sql.Timestamp;
 
 @Table(name = "flights")
+@Valid
 public class Flight extends BaseModel {
 
     @Id
@@ -13,6 +16,7 @@ public class Flight extends BaseModel {
     private Integer id;
 
     @Column(name = "flight_number")
+    @NotNull(message = "Flight number can't be null")
     private String flightNumber;
 
     @ForeignKey(table = "planes", column = "id", lazy = false)
@@ -25,6 +29,7 @@ public class Flight extends BaseModel {
     private City destinationCity;
 
     @Column(name = "departure_time")
+    @NotNull(message = "Departure time can't be null")
     private Timestamp departureTime;
 
     @Column(name = "arrival_time")

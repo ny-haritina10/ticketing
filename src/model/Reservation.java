@@ -2,9 +2,6 @@ package model;
 
 import mg.jwe.orm.annotations.*;
 import mg.jwe.orm.base.BaseModel;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.sql.Timestamp;
 
 @Table(name = "reservations")
@@ -20,24 +17,19 @@ public class Reservation extends BaseModel {
     @ForeignKey(table = "flights", column = "id", lazy = false)
     private Flight flight;
 
-    @Column(name = "seat_category")
-    private String seatCategory;
-
-    @Column(name = "is_promotional")
-    private Boolean isPromotional;
-
-    @Column(name = "price_paid")
-    private BigDecimal pricePaid;
-
     @Column(name = "reservation_time")
     private Timestamp reservationTime;
 
-    @Column(name = "is_cancelled")
-    private Boolean isCancelled;
+    @Column(name = "nbr_billet_total")
+    private Integer nbrBilletTotal;
 
-    @Column(name = "cancellation_time")
-    private Timestamp cancellationTime;
+    @Column(name = "nbr_billet_enfant")
+    private Integer nbrBilletEnfant;
 
+    @Column(name = "nbr_billet_adulte")
+    private Integer nbrBilletAdulte;
+
+    // Getters and Setters
     public Integer getId() {
         return id;
     }
@@ -62,30 +54,6 @@ public class Reservation extends BaseModel {
         this.flight = flight;
     }
 
-    public String getSeatCategory() {
-        return seatCategory;
-    }
-
-    public void setSeatCategory(String seatCategory) {
-        this.seatCategory = seatCategory;
-    }
-
-    public Boolean getIsPromotional() {
-        return isPromotional;
-    }
-
-    public void setIsPromotional(Boolean isPromotional) {
-        this.isPromotional = isPromotional;
-    }
-
-    public BigDecimal getPricePaid() {
-        return pricePaid;
-    }
-
-    public void setPricePaid(BigDecimal pricePaid) {
-        this.pricePaid = pricePaid;
-    }
-
     public Timestamp getReservationTime() {
         return reservationTime;
     }
@@ -94,19 +62,27 @@ public class Reservation extends BaseModel {
         this.reservationTime = reservationTime;
     }
 
-    public Boolean getIsCancelled() {
-        return isCancelled;
+    public Integer getNbrBilletTotal() {
+        return nbrBilletTotal;
     }
 
-    public void setIsCancelled(Boolean isCancelled) {
-        this.isCancelled = isCancelled;
+    public void setNbrBilletTotal(Integer nbrBilletTotal) {
+        this.nbrBilletTotal = nbrBilletTotal;
     }
 
-    public Timestamp getCancellationTime() {
-        return cancellationTime;
+    public Integer getNbrBilletEnfant() {
+        return nbrBilletEnfant;
     }
 
-    public void setCancellationTime(Timestamp cancellationTime) {
-        this.cancellationTime = cancellationTime;
-    }    
+    public void setNbrBilletEnfant(Integer nbrBilletEnfant) {
+        this.nbrBilletEnfant = nbrBilletEnfant;
+    }
+
+    public Integer getNbrBilletAdulte() {
+        return nbrBilletAdulte;
+    }
+
+    public void setNbrBilletAdulte(Integer nbrBilletAdulte) {
+        this.nbrBilletAdulte = nbrBilletAdulte;
+    }
 }

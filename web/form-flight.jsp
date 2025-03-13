@@ -1,8 +1,12 @@
 <%@ page import="model.*" %>
+<%@ page import="java.util.Map, java.util.List, engine.ValidationResult" %>
+
 
 <%
   Plane[] planes = (Plane[]) request.getAttribute("planes");
   City[] cities = (City[]) request.getAttribute("cities");
+
+  ValidationResult errors = (ValidationResult) request.getAttribute("validationErrors");
 %>
 
 <h2>Flight Insertion</h2>
@@ -34,6 +38,11 @@
 
   <p>Departure Time</p>
   <input type="datetime-local" name="departureTime">
+  <% if (errors != null && errors.getErrors().get("departureTime") != null) { %>
+    <p style="color: red;">
+        <%= errors.getErrors().get("departureTime") %>
+    </p>
+  <% } %>
 
   <p>Arrival Time</p>
   <input type="datetime-local" name="arrivalTime">

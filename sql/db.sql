@@ -73,20 +73,6 @@ CREATE TABLE flight_promotions (
     UNIQUE(id_flight, category)
 );
 
--- Reservations table
-CREATE TABLE reservations (
-    id SERIAL PRIMARY KEY,
-    id_client INTEGER REFERENCES clients(id) ON DELETE RESTRICT,
-    id_flight INTEGER REFERENCES flights(id) ON DELETE RESTRICT,
-    seat_category seat_category NOT NULL,
-    is_promotional BOOLEAN NOT NULL DEFAULT FALSE,
-    price_paid DECIMAL(10, 2) NOT NULL CHECK (price_paid >= 0),
-    reservation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
-    cancellation_time TIMESTAMP WITH TIME ZONE,
-    CHECK (cancellation_time IS NULL OR cancellation_time > reservation_time)
-);
-
 -- Static Data
 INSERT INTO admins (id, email, password_hash) 
 VALUES (1, 'admin@gmail.com', 'admin');
@@ -216,3 +202,42 @@ CREATE TABLE flight_reservation (
 );
 
 ALTER TABLE clients ADD COLUMN passport_image VARCHAR(255);
+
+
+-- Reservations table
+-- CREATE TABLE reservations (
+--     id SERIAL PRIMARY KEY,
+--     id_client INTEGER REFERENCES clients(id) ON DELETE RESTRICT,
+--     id_flight INTEGER REFERENCES flights(id) ON DELETE RESTRICT,
+--     seat_category seat_category NOT NULL,
+--     is_promotional BOOLEAN NOT NULL DEFAULT FALSE,
+--     price_paid DECIMAL(10, 2) NOT NULL CHECK (price_paid >= 0),
+--     reservation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+--     is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
+--     cancellation_time TIMESTAMP WITH TIME ZONE,
+--     CHECK (cancellation_time IS NULL OR cancellation_time > reservation_time)
+-- );
+
+
+CREATE TABLE reservations (
+    id SERIAL PRIMARY KEY,
+    id_client INTEGER REFERENCES clients(id) ON DELETE RESTRICT,
+    id_flight INTEGER REFERENCES flights(id) ON DELETE RESTRICT,
+    reservation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    nbr_billet_total INT NOT NULL,
+    nbr_billet_enfant INT NOT NULL,
+    nbr_billet_adulte INT NOT NULL
+);
+
+CREATE TABLE reservations_details (
+    id SERIAL PRIMARY KEY,
+    id_reservation INTEGER REFERENCES reservations(id) ON DELETE RESTRICT,
+    seat_category VARCHAR(255) NOT NULL,
+    name_voyageur VARCHAR(255) NOT NULL,
+    dtn_voyageur DATE NOT NULL,
+    passport_image VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,      -- valeur calculée
+    is_promotional BOOLEAN NOT NULL,
+    is_cancel BOOLEAN NOT NULL,
+    cancellation_time TIMESTAMP WITH TIME ZONE
+);

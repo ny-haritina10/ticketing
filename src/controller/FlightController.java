@@ -22,7 +22,7 @@ import model.FlightReservation;
 import model.Plane;
 
 import modelview.ModelView;
-
+import validation.Valid;
 import annotation.AuthController;
 
 @AuthController(roles = { Admin.class })  
@@ -59,7 +59,7 @@ public class FlightController {
 
     @AnnotationPostMapping
     @AnnotationURL("/insert")
-    public ModelView insert(@AnnotationModelAttribute("flight") Flight flight) {
+    public ModelView insert(@Valid @AnnotationModelAttribute("flight") Flight flight) {
         try (Connection connection = new Database().getConnection()) {
             flight.setFlightNumber(UUID.randomUUID().toString().substring(1, 20));
             flight.save(connection);
