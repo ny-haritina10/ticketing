@@ -4,6 +4,8 @@
 
 <%
   Reservation[] reservations = (Reservation[]) request.getAttribute("reservations");
+  Map<Reservation, ReservationDetail[]> reservationDetails = (Map<Reservation, ReservationDetail[]>) request.getAttribute("reservationDetails");
+  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 %>
 
 
@@ -160,31 +162,72 @@
           overflow-x: auto;
         }
       }
+
+      .reservation-card {
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .reservation-card h2 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .reservation-card h3 {
+      color: var(--secondary-color);
+      margin: 1.5rem 0 1rem;
+    }
+
+    .reservation-card p {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
     </style>
 </head>
 <body>
-  <h1>Your reservation list</h1>
+  <h1>Your Reservations</h1>
 
-  <table border="2">
-    <thead>
-      <tr>
-        <th>Flight Number</th>
-        <th>Seat Category</th>
-        <th>Reservation Time</th>
-        <th>Price paid</th>
-      </tr>
-    </thead>
+  <% for (Reservation reservation : reservations) { %>
+    <div class="reservation-card">
+      <h2>Flight: <%= reservation.getFlight().getFlightNumber() %></h2>
+      <p>Reservation Time: <%= dateFormat.format(reservation.getReservationTime()) %></p>
+      <p>Total Tickets: <%= reservation.getNbrBilletTotal() %></p>
+      <p>Adult Tickets: <%= reservation.getNbrBilletAdulte() %></p>
+      <p>Child Tickets: <%= reservation.getNbrBilletEnfant() %></p>
 
-    <tbody>
-      <% for (Reservation reservation : reservations) { %>
-        <tr>
-          <td><%= reservation.getFlight().getFlightNumber() %></td>
-          <td><%= reservation.getSeatCategory() %></td>
-          <td><%= reservation.getReservationTime() %></td>
-          <td>$<%= reservation.getPricePaid() %></td>
-        </tr>
-      <% } %>
-    </tbody>
-  </table>
+      <h3>Passenger Details:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Passenger Name</th>
+            <th>Date of Birth</th>
+            <th>Seat Category</th>
+            <th>Price Paid</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (ReservationDetail detail : reservationDetails.get(reservation)) { %>
+            <tr>
+              <td><%= detail.getNameVoyageur() %></td>
+              <td><%= detail.getDtnVoyageur() %></td>
+              <td><%= detail.getSeatCategory() %></td>
+              <td>$<%= detail.getPrice() %></td>
+              <td>
+                <% if (detail.getIsCancel()) { %>
+                  Cancelled (<%= dateFormat.format(detail.getCancellationTime()) %>)
+                <% } else { %>
+                  Active
+                <% } %>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
 </body>
 </html>

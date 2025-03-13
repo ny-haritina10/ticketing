@@ -33,6 +33,9 @@ import service.FlightService;
 import session.Session;
 import upload.FileUpload;
 
+import model.ReservationDetail;
+import java.sql.Date;
+
 @AnnotationController(name = "front_office_controller")
 public class FrontOfficeController {
 
@@ -164,13 +167,26 @@ public class FrontOfficeController {
             int idClient = (int) session.get("connected_client");
             Client client = Client.findById(connection, Client.class, idClient);
             
+            // Get all reservations for the client
             Reservation[] reservations = Reservation.findByCriteria(
                 connection, 
                 Reservation.class, 
                 new Criterion("id_client", "=", client.getId())
             );
 
+            // For each reservation, get its details
+            Map<Reservation, ReservationDetail[]> reservationDetails = new HashMap<>();
+            for (Reservation reservation : reservations) {
+                ReservationDetail[] details = ReservationDetail.findByCriteria(
+                    connection,
+                    ReservationDetail.class,
+                    new Criterion("id_reservation", "=", reservation.getId())
+                );
+                reservationDetails.put(reservation, details);
+            }
+
             mv.add("reservations", reservations);
+            mv.add("reservationDetails", reservationDetails);
             return mv;
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,36 +199,54 @@ public class FrontOfficeController {
     public ModelView flightReservation(
         @AnnotationRequestParam(name = "flight") Integer idFlight,
         @AnnotationRequestParam(name = "seatCategorie") String categorie,
-        @AnnotationRequestParam(name = "reservation_time") Timestamp reservationTime
+        @AnnotationRequestParam(name = "reservation_time") Timestamp reservationTime,
+        @AnnotationRequestParam(name = "nbr_billet_total") Integer nbrBilletTotal,
+        @AnnotationRequestParam(name = "nbr_billet_enfant") Integer nbrBilletEnfant,
+        @AnnotationRequestParam(name = "nbr_billet_adulte") Integer nbrBilletAdulte,
+        @AnnotationRequestParam(name = "name_voyageur") String nameVoyageur,
+        @AnnotationRequestParam(name = "dtn_voyageur") Date dtnVoyageur,
+        @AnnotationFileUpload("passport_image") FileUpload passportFile
     ) {
         try (Connection connection = new Database().getConnection()) {
             int idClient = (int) session.get("connected_client");
             Client client = Client.findById(connection, Client.class, idClient);
-
             Flight flight = Flight.findById(connection, Flight.class, idFlight);
 
-            boolean isPromotional = FlightService.isSeatCategoryPromotional(connection, flight, categorie, reservationTime);
-
-            String[] seatCategories = new String[] { "Economy", "Business", "First Class" };
-
-            Map<String, SeatPrice> result = FlightService.calculateSeatPrices(connection, flight.getId(), seatCategories);
-
-            result.forEach((category, seatPrice) -> {
-                System.out.println("Category: " + category + ", SeatPrice: " + seatPrice);
-            });
-
+            // Create main reservation
             Reservation reservation = new Reservation();
-
+            
             reservation.setFlight(flight);
-            reservation.setSeatCategory(categorie);
             reservation.setClient(client);
             reservation.setReservationTime(reservationTime);
-            reservation.setIsPromotional(isPromotional);
-            reservation.setPricePaid(new BigDecimal(result.get(categorie).getFinalPrice()));
-            reservation.setIsCancelled(false);
-            reservation.setCancellationTime(null);
-
+            reservation.setNbrBilletTotal(nbrBilletTotal);
+            reservation.setNbrBilletEnfant(nbrBilletEnfant);
+            reservation.setNbrBilletAdulte(nbrBilletAdulte);
             reservation.save(connection);
+
+            // Handle passport image
+            String relativePath = "uploads/" + UUID.randomUUID().toString() + "_" + passportFile.getFileName();
+            String savedPath = PATH + "/" + relativePath;
+            passportFile.saveToDirectory(PATH);
+
+            // Calculate price and check for promotions
+            boolean isPromotional = FlightService.isSeatCategoryPromotional(connection, flight, categorie, reservationTime);
+            Map<String, SeatPrice> prices = FlightService.calculateSeatPrices(connection, flight.getId(), 
+                new String[] { categorie });
+            double finalPrice = prices.get(categorie).getFinalPrice();
+
+            // Create reservation detail
+            ReservationDetail detail = new ReservationDetail();
+            detail.setReservation(reservation);
+            detail.setSeatCategory(categorie);
+            detail.setNameVoyageur(nameVoyageur);
+            detail.setDtnVoyageur(dtnVoyageur);
+            detail.setPassportImage(relativePath);
+            detail.setPrice(new BigDecimal(finalPrice));
+            detail.setIsPromotional(isPromotional);
+            detail.setIsCancel(false);
+            detail.setCancellationTime(null);
+            detail.save(connection);
+
             return listReservation();   
         } catch (Exception e) {
             e.printStackTrace();

@@ -158,29 +158,90 @@
         overflow-x: auto;
       }
     }
+
+    .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: var(--transition);
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-light);
+  }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Flight Reservation</h1>
 
-    <form action="flight_reservation" method="post">
-      <select name="flight" id="flight">
+    <form action="flight_reservation" method="post" enctype="multipart/form-data">
+      <p>Vol: </p>
+      <select name="flight" id="flight" required>
         <% for(Flight flight : flights) { %>
           <option value="<%= flight.getId() %>">
-            <%= flight.getFlightNumber()%> - <%= flight.getOriginCity() %> to <%= flight.getDestinationCity() %> 
+            <%= flight.getFlightNumber()%> - <%= flight.getOriginCity().getCityName() %> to <%= flight.getDestinationCity().getCityName() %> 
           </option>
         <% } %>
       </select>
 
-      <select name="seatCategorie" id="seatCategorie">
+      <p>Siege categorie: </p>
+      <select name="seatCategorie" id="seatCategorie" required>
         <% for(String categorie : seatCategories) { %>
           <option value="<%= categorie %>"><%= categorie %></option>
         <% } %>
       </select>
 
+      <div class="form-group">
+        <label for="nbr_billet_total">Total Tickets:</label>
+        <input type="number" name="nbr_billet_total" id="nbr_billet_total" required min="1">
+      </div>
+
+      <div class="form-group">
+        <label for="nbr_billet_enfant">Child Tickets:</label>
+        <input type="number" name="nbr_billet_enfant" id="nbr_billet_enfant" required min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="nbr_billet_adulte">Adult Tickets:</label>
+        <input type="number" name="nbr_billet_adulte" id="nbr_billet_adulte" required min="1">
+      </div>
+
+      <div class="form-group">
+        <label for="name_voyageur">Passenger Name:</label>
+        <input type="text" name="name_voyageur" id="name_voyageur" required>
+      </div>
+
+      <div class="form-group">
+        <label for="dtn_voyageur">Date of Birth:</label>
+        <input type="date" name="dtn_voyageur" id="dtn_voyageur" required>
+      </div>
+
+      <div class="form-group">
+        <label for="passport_image">Passport Image:</label>
+        <input type="file" name="passport_image" id="passport_image" accept="image/*" required>
+      </div>
+
+      <p>Date reservation: </p>
       <input type="datetime-local" name="reservation_time" required>
-      
+        
       <input type="submit" value="Make Reservation">
     </form>
   </div>

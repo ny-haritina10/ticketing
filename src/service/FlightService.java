@@ -1,7 +1,6 @@
 package service;
 
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,19 +47,29 @@ public class FlightService {
         return seatPrices;
     }
 
-    public static boolean isSeatCategoryPromotional(Connection connection, Flight flight, String seatCategory,Timestamp reservationDateTime) 
+    public static boolean isSeatCategoryPromotional(Connection connection, Flight flight, String seatCategory, Timestamp reservationDateTime) 
         throws SQLException 
     {
-        // get all reservations based on the flight and the seat category
-        Reservation[] reservations = Reservation.findByCriteria(
-            connection, 
-            Reservation.class, 
-            new Criterion("id_flight", "=", flight.getId()),
-            new Criterion("seat_category", "=", seatCategory),
-            new Criterion("reservation_time", "<=", reservationDateTime)
-        );
+        // Get all reservation details based on the flight and seat category
+        String query = "SELECT COUNT(*) FROM reservations r " +
+                    "JOIN reservations_details rd ON r.id = rd.id_reservation " +
+                    "WHERE r.id_flight = ? AND rd.seat_category = ? " +
+                    "AND r.reservation_time <= ? AND rd.is_cancel = false";
+
+        int reservedSeat = 0;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, flight.getId());
+            stmt.setString(2, seatCategory);
+            stmt.setTimestamp(3, reservationDateTime);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    reservedSeat = rs.getInt(1);
+                }
+            }
+        }
         
-        // only one promotion for a flight and seat type
+        // Check promotions (unchanged)
         FlightPromotion[] promotions = FlightPromotion.findByCriteria(
             connection, 
             FlightPromotion.class, 
@@ -68,16 +77,14 @@ public class FlightService {
             new Criterion("category", "=", seatCategory)
         );
 
-        int reservedSeat = reservations.length;
         int result = 0;
 
-        if (promotions.length == 0 || promotions == null) 
-        { result += (0 - reservedSeat); }
-        
-        else  
-        { result += (promotions[0].getSeatsAvailable()) - reservedSeat; }
+        if (promotions.length == 0 || promotions == null) {
+            result = -reservedSeat;
+        } else {
+            result = promotions[0].getSeatsAvailable() - reservedSeat;
+        }
 
-        if (result <= 0) return false;
-        else return true;
+        return result > 0;
     }
 }
