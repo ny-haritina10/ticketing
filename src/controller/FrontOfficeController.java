@@ -214,7 +214,7 @@ public class FrontOfficeController {
 
             // Create main reservation
             Reservation reservation = new Reservation();
-            
+
             reservation.setFlight(flight);
             reservation.setClient(client);
             reservation.setReservationTime(reservationTime);
@@ -236,6 +236,7 @@ public class FrontOfficeController {
 
             // Create reservation detail
             ReservationDetail detail = new ReservationDetail();
+            
             detail.setReservation(reservation);
             detail.setSeatCategory(categorie);
             detail.setNameVoyageur(nameVoyageur);
@@ -245,6 +246,7 @@ public class FrontOfficeController {
             detail.setIsPromotional(isPromotional);
             detail.setIsCancel(false);
             detail.setCancellationTime(null);
+
             detail.save(connection);
 
             return listReservation();   

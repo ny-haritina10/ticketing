@@ -231,7 +231,7 @@ CREATE TABLE reservations (
 
 CREATE TABLE reservations_details (
     id SERIAL PRIMARY KEY,
-    id_reservation INTEGER REFERENCES reservations(id) ON DELETE RESTRICT,
+    id_reservation INTEGER REFERENCES NOT NULL reservations(id) ON DELETE RESTRICT,
     seat_category VARCHAR(255) NOT NULL,
     name_voyageur VARCHAR(255) NOT NULL,
     dtn_voyageur DATE NOT NULL,
