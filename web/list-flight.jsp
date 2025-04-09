@@ -34,6 +34,7 @@
                 <a href="details?id=<%= flight.getId() %>" style="background-color: #17a2b8; color: white; padding: 0.3rem 0.6rem; border-radius: 4px; text-decoration: none; margin-right: 0.5rem; font-size: 0.9rem;">Details</a>
                 <a href="edit?id=<%= flight.getId() %>" style="background-color: #ffc107; color: #212529; padding: 0.3rem 0.6rem; border-radius: 4px; text-decoration: none; margin-right: 0.5rem; font-size: 0.9rem;">Edit</a>
                 <a href="configure?id=<%= flight.getId() %>" style="background-color: var(--primary-color); color: white; padding: 0.3rem 0.6rem; border-radius: 4px; text-decoration: none; margin-right: 0.5rem; font-size: 0.9rem;">Prices</a>
+                <a href="api/export?id=<%= flight.getId() %>" style="background-color: #28a745; color: white; padding: 0.3rem 0.6rem; border-radius: 4px; text-decoration: none; margin-right: 0.5rem; font-size: 0.9rem;">Export PDF</a>
                 <button onclick="confirmDelete('<%= flight.getId() %>', '<%= flight.getFlightNumber() %>')" style="background-color: #dc3545; color: white; padding: 0.3rem 0.6rem; border-radius: 4px; border: none; cursor: pointer; font-size: 0.9rem;">Delete</button>
               </td>
             </tr>

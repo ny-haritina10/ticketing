@@ -1,8 +1,11 @@
 package controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Connection;
-import java.util.UUID;
 
 import annotation.AnnotationController;
 import annotation.AnnotationGetMapping;
@@ -10,7 +13,7 @@ import annotation.AnnotationModelAttribute;
 import annotation.AnnotationPostMapping;
 import annotation.AnnotationRequestParam;
 import annotation.AnnotationURL;
-
+import annotation.AuthController;
 import database.Database;
 import mg.jwe.orm.criteria.Criterion;
 import model.Admin;
@@ -20,55 +23,13 @@ import model.FlightPrice;
 import model.FlightPromotion;
 import model.FlightReservation;
 import model.Plane;
-
 import modelview.ModelView;
-import validation.Valid;
-import annotation.AuthController;
 
 @AuthController(roles = { Admin.class })  
 @AnnotationController(name = "flight_controller")
 public class FlightController {
 
     private static final String MAIN_TEMPLATE = "main.jsp";
-
-    @AnnotationGetMapping
-    @AnnotationURL("/form")
-    public ModelView redirectToForm() {
-        try (Connection connection = new Database().getConnection()){
-            // Create ModelView with main template instead of direct view
-            ModelView mv = new ModelView(MAIN_TEMPLATE);
-            
-            City[] cities = City.getAll(connection, City.class);
-            Plane[] planes = Plane.getAll(connection, Plane.class);
-
-            // Add data for the form
-            mv.add("cities", cities);
-            mv.add("planes", planes);
-            
-            // Add template parameters
-            mv.add("activePage", "insert_flight");
-            mv.add("contentPage", "form-flight.jsp");
-            mv.add("pageTitle", "Insert Flight");
-
-            return mv;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @AnnotationPostMapping
-    @AnnotationURL("/insert")
-    public ModelView insert(@Valid @AnnotationModelAttribute("flight") Flight flight) {
-        try (Connection connection = new Database().getConnection()) {
-            flight.setFlightNumber(UUID.randomUUID().toString().substring(1, 20));
-            flight.save(connection);
-            return list(); 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     @AnnotationGetMapping
     @AnnotationURL("/list")
@@ -407,6 +368,63 @@ public class FlightController {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @AnnotationGetMapping
+    @AnnotationURL("/api/export")
+    public ModelView exportToPDF(@AnnotationRequestParam(name = "id") Integer id) {
+        try {
+            // Define the Spring Boot API endpoint
+            String apiUrl = "http://localhost:8099/api/export/reservation/" + id;
+            
+            // Create URL and open connection
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+            // Set request method and properties
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/pdf");
+            
+            // Get response code
+            int responseCode = connection.getResponseCode();
+            
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Read the PDF bytes from the response
+                InputStream inputStream = connection.getInputStream();
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                
+                int bytesRead;
+                byte[] data = new byte[4096]; // Larger buffer for efficiency
+                while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, bytesRead);
+                }
+                
+                // Clean up
+                buffer.flush();
+                byte[] pdfBytes = buffer.toByteArray();
+                buffer.close();
+                inputStream.close();
+                connection.disconnect();
+                
+                // Create ModelView to return the PDF
+                ModelView mv = new ModelView("pdf-download.jsp");
+                mv.add("pdfData", pdfBytes);
+                mv.add("fileName", "reservation_" + id + ".pdf");
+                
+                return mv;
+            } else {
+                // Create error ModelView
+                ModelView errorMv = new ModelView("error.jsp");
+                errorMv.add("errorMessage", "Failed to retrieve PDF. Status code: " + responseCode);
+                return errorMv;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            ModelView errorMv = new ModelView("error.jsp");
+            errorMv.add("errorMessage", "Error: " + e.getMessage());
+            return errorMv;
         }
     }
 }

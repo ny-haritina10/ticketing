@@ -194,6 +194,9 @@ VALUES (2, 'Client 2', 'client2@gmail.com', 'client2');
 INSERT INTO clients (id, name, email, password_hash)
 VALUES (3, 'Client 3', 'client3@gmail.com', 'client3');
 
+INSERT INTO clients (id, name, email, password_hash)
+VALUES (3, 'Client 4', 'client4@gmail.com', 'client4');
+
 CREATE TABLE flight_reservation (
     id SERIAL PRIMARY KEY,
     id_flight INTEGER REFERENCES flights(id) ON DELETE RESTRICT,

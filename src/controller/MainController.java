@@ -32,12 +32,8 @@ public class MainController {
                     System.out.println("Category: " + category + ", SeatPrice: " + seatPrice);
                 });
 
-                System.out.println("/*-------------------*/");
-
                 for(String type: seatCategories) {
-                    System.out.println(FlightService.isSeatCategoryPromotional(connection, flight, type, Timestamp.valueOf(LocalDateTime.now())));
-                    
-                    System.out.println("--------***----------");
+                    System.out.println(FlightService.isSeatCategoryPromotional(connection, flight, type, Timestamp.valueOf(LocalDateTime.now())));                    
                 }
             }
 
