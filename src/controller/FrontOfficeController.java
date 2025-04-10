@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,15 +26,13 @@ import model.Client;
 import model.Flight;
 import model.Plane;
 import model.Reservation;
+import model.ReservationDetail;
 import model.SeatPrice;
 import modelview.ModelView;
 import service.ClientService;
 import service.FlightService;
 import session.Session;
 import upload.FileUpload;
-
-import model.ReservationDetail;
-import java.sql.Date;
 
 @AnnotationController(name = "front_office_controller")
 public class FrontOfficeController {
@@ -43,7 +41,6 @@ public class FrontOfficeController {
     private final String PATH;
     
     public FrontOfficeController() {
-
         // load .env file
         Properties props = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(".env")) {

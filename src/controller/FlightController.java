@@ -30,7 +30,8 @@ import modelview.ModelView;
 public class FlightController {
 
     private static final String MAIN_TEMPLATE = "main.jsp";
-
+    private final String TOKEN = "yuifwbefe-34wefwe-sssf3-3iwxxsw";
+    
     @AnnotationGetMapping
     @AnnotationURL("/list")
     public ModelView list() {
@@ -375,22 +376,19 @@ public class FlightController {
     @AnnotationURL("/api/export")
     public ModelView exportToPDF(@AnnotationRequestParam(name = "id") Integer id) {
         try {
-            // Define the Spring Boot API endpoint
             String apiUrl = "http://localhost:8099/api/export/reservation/" + id;
             
-            // Create URL and open connection
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             
-            // Set request method and properties
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/pdf");
             
-            // Get response code
+            connection.setRequestProperty("Authorization", "Bearer " + TOKEN);
+            
             int responseCode = connection.getResponseCode();
             
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                // Read the PDF bytes from the response
                 InputStream inputStream = connection.getInputStream();
                 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
                 
@@ -413,8 +411,12 @@ public class FlightController {
                 mv.add("fileName", "reservation_" + id + ".pdf");
                 
                 return mv;
+            } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED || 
+                    responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                ModelView errorMv = new ModelView("error.jsp");
+                errorMv.add("errorMessage", "Authentication failed. Please check your credentials.");
+                return errorMv;
             } else {
-                // Create error ModelView
                 ModelView errorMv = new ModelView("error.jsp");
                 errorMv.add("errorMessage", "Failed to retrieve PDF. Status code: " + responseCode);
                 return errorMv;
