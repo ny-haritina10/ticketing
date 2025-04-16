@@ -1,10 +1,6 @@
 package controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.Connection;
 
 import annotation.AnnotationController;
@@ -30,7 +26,6 @@ import modelview.ModelView;
 public class FlightController {
 
     private static final String MAIN_TEMPLATE = "main.jsp";
-    private final String TOKEN = "yuifwbefe-34wefwe-sssf3-3iwxxsw";
     
     @AnnotationGetMapping
     @AnnotationURL("/list")
@@ -369,64 +364,6 @@ public class FlightController {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    @AnnotationGetMapping
-    @AnnotationURL("/api/export")
-    public ModelView exportToPDF(@AnnotationRequestParam(name = "id") Integer id) {
-        try {
-            String apiUrl = "http://localhost:8099/api/export/reservation/" + id;
-            
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Accept", "application/pdf");
-            
-            connection.setRequestProperty("Authorization", "Bearer " + TOKEN);
-            
-            int responseCode = connection.getResponseCode();
-            
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                InputStream inputStream = connection.getInputStream();
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                
-                int bytesRead;
-                byte[] data = new byte[4096]; // Larger buffer for efficiency
-                while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
-                    buffer.write(data, 0, bytesRead);
-                }
-                
-                // Clean up
-                buffer.flush();
-                byte[] pdfBytes = buffer.toByteArray();
-                buffer.close();
-                inputStream.close();
-                connection.disconnect();
-                
-                // Create ModelView to return the PDF
-                ModelView mv = new ModelView("pdf-download.jsp");
-                mv.add("pdfData", pdfBytes);
-                mv.add("fileName", "reservation_" + id + ".pdf");
-                
-                return mv;
-            } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED || 
-                    responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
-                ModelView errorMv = new ModelView("error.jsp");
-                errorMv.add("errorMessage", "Authentication failed. Please check your credentials.");
-                return errorMv;
-            } else {
-                ModelView errorMv = new ModelView("error.jsp");
-                errorMv.add("errorMessage", "Failed to retrieve PDF. Status code: " + responseCode);
-                return errorMv;
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            ModelView errorMv = new ModelView("error.jsp");
-            errorMv.add("errorMessage", "Error: " + e.getMessage());
-            return errorMv;
         }
     }
 }
