@@ -51,7 +51,7 @@ jar -cvf "../$app_name.war" .
 cd ..
 
 # deploy
-cp "$app_name.war" "/opt/tomcat10.1/webapps"
+cp "$app_name.war" "/opt/tomcat9/webapps"
 
 # cleanup temp directory
 rm -rf "$root/temp"
