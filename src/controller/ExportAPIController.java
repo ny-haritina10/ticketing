@@ -56,29 +56,25 @@ public class ExportAPIController {
             
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/pdf");
-            
             connection.setRequestProperty("Authorization", "Bearer " + TOKEN);
             
-            int responseCode = connection.getResponseCode();
-            
+            int responseCode = connection.getResponseCode();            
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 InputStream inputStream = connection.getInputStream();
                 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
                 
                 int bytesRead;
-                byte[] data = new byte[4096]; // Larger buffer for efficiency
+                byte[] data = new byte[4096]; 
                 while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
                     buffer.write(data, 0, bytesRead);
                 }
                 
-                // Clean up
                 buffer.flush();
                 byte[] pdfBytes = buffer.toByteArray();
                 buffer.close();
                 inputStream.close();
                 connection.disconnect();
                 
-                // Create ModelView to return the PDF
                 ModelView mv = new ModelView("pdf-download.jsp");
                 mv.add("pdfData", pdfBytes);
                 mv.add("fileName", "reservation_" + id + ".pdf");

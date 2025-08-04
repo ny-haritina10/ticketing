@@ -1,13 +1,15 @@
 package database;
 
-import java.sql.*;
-import java.util.Properties;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
 public class Database {
 
-    private static final String CONFIG_FILE = "D:\\Studies\\ITU\\S5\\INF313_Framework\\ticketing\\conf\\_db.properties";
+    private static final String CONFIG_FILE = "/home/ny-haritina/Documents/Studies/ITU/S5/INF313_Framework/ticketing/conf/_db.properties";
     private static Database instance;
     private Connection connection;
     

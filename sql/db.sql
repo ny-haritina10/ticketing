@@ -9,7 +9,7 @@ CREATE TABLE planes (
 CREATE TABLE seat_configurations (
     id SERIAL PRIMARY KEY,
     id_plane INTEGER REFERENCES planes(id) ON DELETE CASCADE,
-    category seat_category NOT NULL,
+    category VARCHAR(255),
     number_of_seats INTEGER NOT NULL CHECK (number_of_seats > 0),
     UNIQUE(id_plane, category)
 );
@@ -43,7 +43,7 @@ CREATE TABLE flights (
 CREATE TABLE flight_prices (
     id SERIAL PRIMARY KEY,
     id_flight INTEGER REFERENCES flights(id) ON DELETE CASCADE,
-    category seat_category NOT NULL,
+    category VARCHAR(255),
     base_price DECIMAL(10, 2) NOT NULL CHECK (base_price > 0),
     UNIQUE(id_flight, category)
 );
@@ -67,7 +67,7 @@ CREATE TABLE admins (
 CREATE TABLE flight_promotions (
     id SERIAL PRIMARY KEY,
     id_flight INTEGER REFERENCES flights(id) ON DELETE CASCADE,
-    category seat_category NOT NULL,
+    category VARCHAR(255),
     discount_percentage DECIMAL(5, 2) NOT NULL CHECK (discount_percentage > 0 AND discount_percentage <= 100),
     seats_available INTEGER NOT NULL CHECK (seats_available > 0),
     UNIQUE(id_flight, category)
@@ -167,23 +167,6 @@ VALUES(9,'São Paulo','Brazil' );
 INSERT INTO cities(id ,city_name ,country )
 VALUES(10,'Moscow','Russia');
 
-
--- Alter category column in seat_configurations table
-ALTER TABLE seat_configurations 
-ALTER COLUMN category TYPE VARCHAR(255) USING category::VARCHAR(255);
-
--- Alter category column in flight_prices table
-ALTER TABLE flight_prices 
-ALTER COLUMN category TYPE VARCHAR(255) USING category::VARCHAR(255);
-
--- Alter category column in flight_promotions table
-ALTER TABLE flight_promotions 
-ALTER COLUMN category TYPE VARCHAR(255) USING category::VARCHAR(255);
-
--- Alter seat_category column in reservations table
-ALTER TABLE reservations 
-ALTER COLUMN seat_category TYPE VARCHAR(255) USING seat_category::VARCHAR(255);
-
 -- 
 INSERT INTO clients (id, name, email, password_hash)
 VALUES (1, 'Client 1', 'client1@gmail.com', 'client1');
@@ -195,7 +178,7 @@ INSERT INTO clients (id, name, email, password_hash)
 VALUES (3, 'Client 3', 'client3@gmail.com', 'client3');
 
 INSERT INTO clients (id, name, email, password_hash)
-VALUES (3, 'Client 4', 'client4@gmail.com', 'client4');
+VALUES (4, 'Client 4', 'client4@gmail.com', 'client4');
 
 CREATE TABLE flight_reservation (
     id SERIAL PRIMARY KEY,
@@ -212,7 +195,7 @@ ALTER TABLE clients ADD COLUMN passport_image VARCHAR(255);
 --     id SERIAL PRIMARY KEY,
 --     id_client INTEGER REFERENCES clients(id) ON DELETE RESTRICT,
 --     id_flight INTEGER REFERENCES flights(id) ON DELETE RESTRICT,
---     seat_category seat_category NOT NULL,
+--     seat_category VARCHAR(255),
 --     is_promotional BOOLEAN NOT NULL DEFAULT FALSE,
 --     price_paid DECIMAL(10, 2) NOT NULL CHECK (price_paid >= 0),
 --     reservation_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -234,7 +217,7 @@ CREATE TABLE reservations (
 
 CREATE TABLE reservations_details (
     id SERIAL PRIMARY KEY,
-    id_reservation INTEGER REFERENCES NOT NULL reservations(id) ON DELETE RESTRICT,
+    id_reservation INTEGER NOT NULL REFERENCES reservations(id) ON DELETE RESTRICT,
     seat_category VARCHAR(255) NOT NULL,
     name_voyageur VARCHAR(255) NOT NULL,
     dtn_voyageur DATE NOT NULL,
