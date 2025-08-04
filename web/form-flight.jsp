@@ -11,7 +11,7 @@
 
 <h2>Flight Insertion</h2>
 
-<form action="insert" method="post">
+<form action="testMlay" method="post">
   <p>Plane: </p>
   <select name="plane" id="plane">
     <% for (Plane plane : planes) { %>

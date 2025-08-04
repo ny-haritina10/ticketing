@@ -227,3 +227,48 @@ CREATE TABLE reservations_details (
     is_cancel BOOLEAN NOT NULL,
     cancellation_time TIMESTAMP WITH TIME ZONE
 );
+
+
+
+INSERT INTO flights (
+    flight_number, id_plane, id_origin_city, id_destination_city,
+    departure_time, arrival_time, reservation_deadline_hours, cancellation_deadline_hours
+) VALUES (
+    'FL1001', 1, 1, 2,
+    '2025-08-10 08:00:00+00', '2025-08-10 10:30:00+00',
+    3, 24
+);
+
+INSERT INTO flights (
+    flight_number, id_plane, id_origin_city, id_destination_city,
+    departure_time, arrival_time
+) VALUES (
+    'FL1002', 2, 2, 3,
+    '2025-08-12 14:00:00+00', '2025-08-12 18:45:00+00'
+);
+
+INSERT INTO flights (
+    flight_number, id_plane, id_origin_city, id_destination_city,
+    departure_time, arrival_time, reservation_deadline_hours, cancellation_deadline_hours
+) VALUES (
+    'FL1003', 1, 3, 4,
+    '2025-08-15 07:15:00+00', '2025-08-15 09:30:00+00',
+    4, 12
+);
+
+INSERT INTO flights (
+    flight_number, id_plane, id_origin_city, id_destination_city,
+    departure_time, arrival_time
+) VALUES (
+    'FL1004', 2, 4, 5,
+    '2025-08-17 19:00:00+00', '2025-08-17 21:30:00+00'
+);
+
+INSERT INTO flights (
+    flight_number, id_plane, id_origin_city, id_destination_city,
+    departure_time, arrival_time, reservation_deadline_hours, cancellation_deadline_hours
+) VALUES (
+    'FL1005', 1, 5, 1,
+    '2025-08-20 06:45:00+00', '2025-08-20 08:00:00+00',
+    2, 10
+);

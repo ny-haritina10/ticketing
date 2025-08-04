@@ -2,6 +2,7 @@ package controller;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.util.UUID;
 
 import annotation.AnnotationController;
 import annotation.AnnotationGetMapping;
@@ -26,6 +27,53 @@ import modelview.ModelView;
 public class FlightController {
 
     private static final String MAIN_TEMPLATE = "main.jsp";
+
+    @AnnotationGetMapping
+    @AnnotationURL("/form")
+    public ModelView redirectToForm() {
+        try (Connection connection = new Database().getConnection()){
+            // Create ModelView with main template instead of direct view
+            ModelView mv = new ModelView(MAIN_TEMPLATE);
+            
+            City[] cities = City.getAll(connection, City.class);
+            Plane[] planes = Plane.getAll(connection, Plane.class);
+
+            // Add data for the form
+            mv.add("cities", cities);
+            mv.add("planes", planes);
+            
+            // Add template parameters
+            mv.add("activePage", "insert_flight");
+            mv.add("contentPage", "form-flight.jsp");
+            mv.add("pageTitle", "Insert Flight");
+
+            return mv;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @AnnotationPostMapping
+    @AnnotationURL("/insert")
+    public ModelView insert(@AnnotationModelAttribute("flight") Flight flight) {
+        try (Connection connection = new Database().getConnection()) {
+            flight.setFlightNumber(UUID.randomUUID().toString().substring(1, 20));
+            flight.save(connection);
+            return list(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @AnnotationPostMapping
+    @AnnotationURL("/testMlay")
+    public ModelView testMlay(@AnnotationModelAttribute("flight") Flight flight) {
+        System.out.println("TEST MLAY");
+        return list();
+    }
+
     
     @AnnotationGetMapping
     @AnnotationURL("/list")
