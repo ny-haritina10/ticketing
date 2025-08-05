@@ -1,4 +1,4 @@
-<%@ page contentType="application/pdf" %>
+<%@ page contentType="text/plain" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ page import="java.io.*" %>
 <% 
@@ -7,8 +7,8 @@
     
     if (pdfData != null && pdfData.length > 0) {
         response.reset();
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        response.setContentType("text/plain");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName.replace(".pdf", ".txt") + "\"");
         response.setContentLength(pdfData.length);
         
         try {
@@ -18,5 +18,7 @@
         } catch (Exception e) {
             e.printStackTrace();
         }
+    } else {
+        out.println("No data available for download");
     }
 %>

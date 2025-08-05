@@ -1,101 +1,82 @@
 package controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Properties;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
 
 import annotation.AnnotationController;
 import annotation.AnnotationGetMapping;
 import annotation.AnnotationRequestParam;
 import annotation.AnnotationURL;
+import database.Database;
+import mg.jwe.orm.criteria.Criterion;
+import model.Flight;
+import model.FlightPrice;
 import modelview.ModelView;
 
 @AnnotationController(name = "export_api_controller")
 public class ExportAPIController {
 
-    private final String TOKEN;
-    private final String API_EXPORT_ENDPOINT;
-    
-    public ExportAPIController() {
-        Properties props = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream(".env")) {
-            
-            if (input == null) {
-                System.err.println("ERROR: .env file not found in classpath!");
-                API_EXPORT_ENDPOINT = null; 
-                TOKEN = null;
-            } else {
-                props.load(input);
-
-                API_EXPORT_ENDPOINT = props.getProperty("API_EXPORT_ENDPOINT");
-                TOKEN = props.getProperty("TOKEN");
-                
-                if (API_EXPORT_ENDPOINT == null || TOKEN == null) {
-                    throw new RuntimeException("DEPENDENCIES not found in .env file");
-                }
-            }
-
-        } catch (IOException e) {
-            System.err.println("Error loading .env file: " + e.getMessage());
-            e.printStackTrace(); 
-            throw new RuntimeException("Fatal error loading .env file", e); 
-        }
-    }
-
     @AnnotationGetMapping
     @AnnotationURL("/api/export")
     public ModelView exportToPDF(@AnnotationRequestParam(name = "id") Integer id) {
-        try {
-            String apiUrl = API_EXPORT_ENDPOINT + id;
+        try (Connection connection = new Database().getConnection()) {
+            // Get flight data
+            Flight flight = Flight.findById(connection, Flight.class, id);
             
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Accept", "application/pdf");
-            connection.setRequestProperty("Authorization", "Bearer " + TOKEN);
-            
-            int responseCode = connection.getResponseCode();            
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                InputStream inputStream = connection.getInputStream();
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                
-                int bytesRead;
-                byte[] data = new byte[4096]; 
-                while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
-                    buffer.write(data, 0, bytesRead);
-                }
-                
-                buffer.flush();
-                byte[] pdfBytes = buffer.toByteArray();
-                buffer.close();
-                inputStream.close();
-                connection.disconnect();
-                
-                ModelView mv = new ModelView("pdf-download.jsp");
-                mv.add("pdfData", pdfBytes);
-                mv.add("fileName", "reservation_" + id + ".pdf");
-                
-                return mv;
-            } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED || 
-                    responseCode == HttpURLConnection.HTTP_FORBIDDEN) {
+            if (flight == null) {
                 ModelView errorMv = new ModelView("error.jsp");
-                errorMv.add("errorMessage", "Authentication failed. Please check your credentials.");
-                return errorMv;
-            } else {
-                ModelView errorMv = new ModelView("error.jsp");
-                errorMv.add("errorMessage", "Failed to retrieve PDF. Status code: " + responseCode);
+                errorMv.add("errorMessage", "Flight not found with ID: " + id);
                 return errorMv;
             }
+            
+            // Get flight prices
+            FlightPrice[] prices = FlightPrice.findByCriteria(
+                connection, 
+                FlightPrice.class,
+                new Criterion("id_flight", "=", id)
+            );
+            
+            // Generate simple PDF content as HTML (you can use libraries like iText for real PDF)
+            String pdfContent = generatePDFContent(flight, prices);
+            byte[] pdfData = pdfContent.getBytes("UTF-8");
+            
+            // Return PDF download view
+            ModelView mv = new ModelView("pdf-download.jsp");
+            mv.add("pdfData", pdfData);
+            mv.add("fileName", "flight_" + id + ".pdf");
+            
+            return mv;
             
         } catch (Exception e) {
             e.printStackTrace();
             ModelView errorMv = new ModelView("error.jsp");
-            errorMv.add("errorMessage", "Error: " + e.getMessage());
+            errorMv.add("errorMessage", "Error generating PDF: " + e.getMessage());
             return errorMv;
         }
+    }
+    
+    private String generatePDFContent(Flight flight, FlightPrice[] prices) {
+        StringBuilder content = new StringBuilder();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        
+        content.append("FLIGHT INFORMATION REPORT\n");
+        content.append("========================\n\n");
+        content.append("Flight Number: ").append(flight.getFlightNumber()).append("\n");
+        content.append("Route: ").append(flight.getOriginCity().getCityName())
+               .append(" to ").append(flight.getDestinationCity().getCityName()).append("\n");
+        content.append("Departure: ").append(dateFormat.format(flight.getDepartureTime())).append("\n");
+        content.append("Arrival: ").append(dateFormat.format(flight.getArrivalTime())).append("\n");
+        content.append("Aircraft: ").append(flight.getPlane().getModelName()).append("\n\n");
+        
+        if (prices != null && prices.length > 0) {
+            content.append("PRICING INFORMATION\n");
+            content.append("===================\n");
+            for (FlightPrice price : prices) {
+                content.append(price.getCategory()).append(": $")
+                       .append(price.getBasePrice()).append("\n");
+            }
+        }
+        
+        return content.toString();
     }
 }
