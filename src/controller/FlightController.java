@@ -2,6 +2,8 @@ package controller;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import annotation.AnnotationController;
@@ -56,8 +58,37 @@ public class FlightController {
 
     @AnnotationPostMapping
     @AnnotationURL("/insert")
-    public ModelView insert(@AnnotationModelAttribute("flight") Flight flight) {
+    public ModelView insert(
+        @AnnotationRequestParam(name = "plane") Integer planeId,
+        @AnnotationRequestParam(name = "originCity") Integer originCityId,
+        @AnnotationRequestParam(name = "destinationCity") Integer destinationCityId,
+        @AnnotationRequestParam(name = "departureTime") String departureTime,
+        @AnnotationRequestParam(name = "arrivalTime") String arrivalTime,
+        @AnnotationRequestParam(name = "reservationDeadlineHours") Integer reservationDeadlineHours,
+        @AnnotationRequestParam(name = "cancellationDeadlineHours") Integer cancellationDeadlineHours
+    ) {
         try (Connection connection = new Database().getConnection()) {
+            Plane plane = Plane.findById(connection, Plane.class, planeId);
+            City originCity = City.findById(connection, City.class, originCityId);
+            City destinationCity = City.findById(connection, City.class, destinationCityId);
+            
+            // Create new Flight object
+            Flight flight = new Flight();
+            flight.setPlane(plane);
+            flight.setOriginCity(originCity);
+            flight.setDestinationCity(destinationCity);
+            flight.setReservationDeadlineHours(reservationDeadlineHours);
+            flight.setCancellationDeadlineHours(cancellationDeadlineHours);
+            
+            if (departureTime != null && !departureTime.isEmpty()) {
+                LocalDateTime ldt = LocalDateTime.parse(departureTime);
+                flight.setDepartureTime(Timestamp.valueOf(ldt));
+            }
+            if (arrivalTime != null && !arrivalTime.isEmpty()) {
+                LocalDateTime ldt = LocalDateTime.parse(arrivalTime);
+                flight.setArrivalTime(Timestamp.valueOf(ldt));
+            }
+            
             flight.setFlightNumber(UUID.randomUUID().toString().substring(1, 20));
             flight.save(connection);
             return list(); 
@@ -65,13 +96,6 @@ public class FlightController {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @AnnotationPostMapping
-    @AnnotationURL("/testMlay")
-    public ModelView testMlay(@AnnotationModelAttribute("flight") Flight flight) {
-        System.out.println("TEST MLAY");
-        return list();
     }
 
     
