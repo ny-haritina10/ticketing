@@ -3,22 +3,22 @@ package controller;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 
-import annotation.AnnotationController;
-import annotation.AnnotationGetMapping;
-import annotation.AnnotationRequestParam;
-import annotation.AnnotationURL;
+import annotation.Url;
+import annotation.Controller;
+import annotation.Get;
+import annotation.RequestParam;
 import database.Database;
 import mg.jwe.orm.criteria.Criterion;
 import model.Flight;
 import model.FlightPrice;
 import modelview.ModelView;
 
-@AnnotationController(name = "export_api_controller")
+@Controller(name = "export_api_controller")
 public class ExportAPIController {
 
-    @AnnotationGetMapping
-    @AnnotationURL("/api/export")
-    public ModelView exportToPDF(@AnnotationRequestParam(name = "id") Integer id) {
+    @Get
+    @Url("/api/export")
+    public ModelView exportToPDF(@RequestParam(name = "id") Integer id) {
         try (Connection connection = new Database().getConnection()) {
             // Get flight data
             Flight flight = Flight.findById(connection, Flight.class, id);

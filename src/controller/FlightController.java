@@ -6,13 +6,13 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import annotation.AnnotationController;
-import annotation.AnnotationGetMapping;
-import annotation.AnnotationModelAttribute;
-import annotation.AnnotationPostMapping;
-import annotation.AnnotationRequestParam;
-import annotation.AnnotationURL;
 import annotation.AuthController;
+import annotation.Controller;
+import annotation.Get;
+import annotation.ModelAttribute;
+import annotation.Post;
+import annotation.RequestParam;
+import annotation.Url;
 import database.Database;
 import mg.jwe.orm.criteria.Criterion;
 import model.Admin;
@@ -25,13 +25,13 @@ import model.Plane;
 import modelview.ModelView;
 
 @AuthController(roles = { Admin.class })  
-@AnnotationController(name = "flight_controller")
+@Controller(name = "flight_controller")
 public class FlightController {
 
     private static final String MAIN_TEMPLATE = "main.jsp";
 
-    @AnnotationGetMapping
-    @AnnotationURL("/form")
+    @Get
+    @Url("/form")
     public ModelView redirectToForm() {
         try (Connection connection = new Database().getConnection()){
             // Create ModelView with main template instead of direct view
@@ -56,16 +56,16 @@ public class FlightController {
         }
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/insert")
+    @Post
+    @Url("/insert")
     public ModelView insert(
-        @AnnotationRequestParam(name = "plane") Integer planeId,
-        @AnnotationRequestParam(name = "originCity") Integer originCityId,
-        @AnnotationRequestParam(name = "destinationCity") Integer destinationCityId,
-        @AnnotationRequestParam(name = "departureTime") String departureTime,
-        @AnnotationRequestParam(name = "arrivalTime") String arrivalTime,
-        @AnnotationRequestParam(name = "reservationDeadlineHours") Integer reservationDeadlineHours,
-        @AnnotationRequestParam(name = "cancellationDeadlineHours") Integer cancellationDeadlineHours
+        @RequestParam(name = "plane") Integer planeId,
+        @RequestParam(name = "originCity") Integer originCityId,
+        @RequestParam(name = "destinationCity") Integer destinationCityId,
+        @RequestParam(name = "departureTime") String departureTime,
+        @RequestParam(name = "arrivalTime") String arrivalTime,
+        @RequestParam(name = "reservationDeadlineHours") Integer reservationDeadlineHours,
+        @RequestParam(name = "cancellationDeadlineHours") Integer cancellationDeadlineHours
     ) {
         try (Connection connection = new Database().getConnection()) {
             Plane plane = Plane.findById(connection, Plane.class, planeId);
@@ -99,8 +99,8 @@ public class FlightController {
     }
 
     
-    @AnnotationGetMapping
-    @AnnotationURL("/list")
+    @Get
+    @Url("/list")
     public ModelView list() {
         try (Connection connection = new Database().getConnection()) {
             // Create ModelView with main template
@@ -122,9 +122,9 @@ public class FlightController {
     }
 
     // Load update form
-    @AnnotationGetMapping
-    @AnnotationURL("/edit")
-    public ModelView updateForm(@AnnotationRequestParam(name = "id") Integer id) {
+    @Get
+    @Url("/edit")
+    public ModelView updateForm(@RequestParam(name = "id") Integer id) {
         try (Connection connection = new Database().getConnection()) {
             // Create ModelView with main template
             ModelView mv = new ModelView(MAIN_TEMPLATE);
@@ -150,9 +150,9 @@ public class FlightController {
     }
 
     // Update flight
-    @AnnotationPostMapping
-    @AnnotationURL("/update")
-    public ModelView update(@AnnotationModelAttribute("flight") Flight flight) {
+    @Post
+    @Url("/update")
+    public ModelView update(@ModelAttribute("flight") Flight flight) {
         try (Connection connection = new Database().getConnection()) {
             flight.update(connection);
             return list();
@@ -163,9 +163,9 @@ public class FlightController {
     }
 
     // Delete flight
-    @AnnotationGetMapping
-    @AnnotationURL("/delete")
-    public ModelView delete(@AnnotationRequestParam(name = "id") Integer id) {
+    @Get
+    @Url("/delete")
+    public ModelView delete(@RequestParam(name = "id") Integer id) {
         try (Connection connection = new Database().getConnection()) {
             Flight flight = Flight.findById(connection, Flight.class, id);
             if (flight != null) {
@@ -178,9 +178,9 @@ public class FlightController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/configure")
-    public ModelView configureFlightPrices(@AnnotationRequestParam(name = "id") Integer id) {
+    @Get
+    @Url("/configure")
+    public ModelView configureFlightPrices(@RequestParam(name = "id") Integer id) {
         try (Connection connection = new Database().getConnection()) {
             ModelView mv = new ModelView(MAIN_TEMPLATE);
             Flight flight = Flight.findById(connection, Flight.class, id);
@@ -199,13 +199,13 @@ public class FlightController {
         }
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/configure_flight_price")
+    @Post
+    @Url("/configure_flight_price")
     public ModelView configure(
-        @AnnotationRequestParam(name = "Economy_price") Double economicPrice,
-        @AnnotationRequestParam(name = "Business_price") Double businessPrice,
-        @AnnotationRequestParam(name = "FirstClass_price") Double firstClassPrice,
-        @AnnotationRequestParam(name = "id") Integer id
+        @RequestParam(name = "Economy_price") Double economicPrice,
+        @RequestParam(name = "Business_price") Double businessPrice,
+        @RequestParam(name = "FirstClass_price") Double firstClassPrice,
+        @RequestParam(name = "id") Integer id
     ) {
         try (Connection connection = new Database().getConnection()){
             Flight flight = Flight.findById(connection, Flight.class, id);
@@ -241,9 +241,9 @@ public class FlightController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/details")
-    public ModelView details(@AnnotationRequestParam(name = "id") Integer id) {
+    @Get
+    @Url("/details")
+    public ModelView details(@RequestParam(name = "id") Integer id) {
         try (Connection connection = new Database().getConnection()) {
             // Create ModelView with main template
             ModelView mv = new ModelView(MAIN_TEMPLATE);
@@ -276,8 +276,8 @@ public class FlightController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/form_promotion")
+    @Get
+    @Url("/form_promotion")
     public ModelView redirectToPromotionForm() {
         try (Connection connection = new Database().getConnection()){
             // Create ModelView with main template
@@ -300,13 +300,13 @@ public class FlightController {
         }
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/insert_promotion")
+    @Post
+    @Url("/insert_promotion")
     public ModelView insertPromotion(
-        @AnnotationRequestParam(name = "flight") Integer flightId,
-        @AnnotationRequestParam(name = "category") String category,
-        @AnnotationRequestParam(name = "discountPercentage") double discountPercentage,
-        @AnnotationRequestParam(name = "seatsAvailable") Integer seatsAvailable
+        @RequestParam(name = "flight") Integer flightId,
+        @RequestParam(name = "category") String category,
+        @RequestParam(name = "discountPercentage") double discountPercentage,
+        @RequestParam(name = "seatsAvailable") Integer seatsAvailable
     ) {
         try (Connection connection = new Database().getConnection()) {
             Flight flight = Flight.findById(connection, Flight.class, flightId);
@@ -327,8 +327,8 @@ public class FlightController {
         }
     }   
 
-    @AnnotationGetMapping
-    @AnnotationURL("/list_promotions")
+    @Get
+    @Url("/list_promotions")
     public ModelView listPromotions() {
         try (Connection connection = new Database().getConnection()) {
             // Create ModelView with main template
@@ -349,9 +349,9 @@ public class FlightController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/delete_promotion")
-    public ModelView deletePromotion(@AnnotationRequestParam(name = "id") Integer id) {
+    @Get
+    @Url("/delete_promotion")
+    public ModelView deletePromotion(@RequestParam(name = "id") Integer id) {
         try (Connection connection = new Database().getConnection()) {
             FlightPromotion promotion = FlightPromotion.findById(connection, FlightPromotion.class, id);
             if (promotion != null) {
@@ -364,8 +364,8 @@ public class FlightController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/form_reservation_setting")
+    @Get
+    @Url("/form_reservation_setting")
     public ModelView redirectToReservationForm() {
         try (Connection connection = new Database().getConnection()){
             // Create ModelView with main template
@@ -388,10 +388,10 @@ public class FlightController {
         }
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/insert_reservation_setting")
+    @Post
+    @Url("/insert_reservation_setting")
     public ModelView insertReservation(
-        @AnnotationModelAttribute(value = "flight_reservation") FlightReservation reservation
+        @ModelAttribute(value = "flight_reservation") FlightReservation reservation
     ) {
         try (Connection connection = new Database().getConnection()) {
             reservation.save(connection);
@@ -402,8 +402,8 @@ public class FlightController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/list_reservations_setting")
+    @Get
+    @Url("/list_reservations_setting")
     public ModelView listReservations() {
         try (Connection connection = new Database().getConnection()) {
             // Create ModelView with main template
@@ -424,9 +424,9 @@ public class FlightController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/delete_reservation_setting")
-    public ModelView deleteReservation(@AnnotationRequestParam(name = "id") Integer id) {
+    @Get
+    @Url("/delete_reservation_setting")
+    public ModelView deleteReservation(@RequestParam(name = "id") Integer id) {
         try (Connection connection = new Database().getConnection()) {
             FlightReservation reservation = FlightReservation.findById(connection, FlightReservation.class, id);
             if (reservation != null) {

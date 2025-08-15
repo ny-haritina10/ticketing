@@ -2,20 +2,20 @@ package controller;
 
 import java.sql.Connection;
 
-import annotation.AnnotationController;
-import annotation.AnnotationGetMapping;
-import annotation.AnnotationRestAPI;
-import annotation.AnnotationURL;
+import annotation.Controller;
+import annotation.Get;
+import annotation.RestAPI;
+import annotation.Url;
 import database.Database;
 import model.Flight;
 import modelview.ModelView;
 
-@AnnotationController(name = "api_endpoint")
+@Controller(name = "api_endpoint")
 public class ApiEndpoint {
     
-    @AnnotationGetMapping
-    @AnnotationURL("/api")
-    @AnnotationRestAPI
+    @Get
+    @Url("/api")
+    @RestAPI
     public ModelView api() {
         try (Connection connection = new Database().getConnection()) {
             ModelView mv = new ModelView("test.jsp");

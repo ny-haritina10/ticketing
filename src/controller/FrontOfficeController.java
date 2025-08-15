@@ -13,12 +13,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import annotation.AnnotationController;
-import annotation.AnnotationFileUpload;
-import annotation.AnnotationGetMapping;
-import annotation.AnnotationPostMapping;
-import annotation.AnnotationRequestParam;
-import annotation.AnnotationURL;
+import annotation.Url;
+import annotation.Controller;
+import annotation.Get;
+import annotation.Post;
+import annotation.RequestParam;
+import annotation.Upload;
 import database.Database;
 import mg.jwe.orm.criteria.Criterion;
 import model.City;
@@ -34,7 +34,7 @@ import service.FlightService;
 import session.Session;
 import upload.FileUpload;
 
-@AnnotationController(name = "front_office_controller")
+@Controller(name = "front_office_controller")
 public class FrontOfficeController {
 
     private Session session;
@@ -54,12 +54,12 @@ public class FrontOfficeController {
         }
     }
     
-    @AnnotationGetMapping
-    @AnnotationURL("/front_office_flights")
+    @Get
+    @Url("/front_office_flights")
     public ModelView listFlight(
-        @AnnotationRequestParam(name = "planeId") Integer planeId,
-        @AnnotationRequestParam(name = "originCityId") Integer originCityId,
-        @AnnotationRequestParam(name = "destinationCityId") Integer destinationCityId
+        @RequestParam(name = "planeId") Integer planeId,
+        @RequestParam(name = "originCityId") Integer originCityId,
+        @RequestParam(name = "destinationCityId") Integer destinationCityId
     ) {
         try (Connection connection = new Database().getConnection()) {
             ModelView mv = new ModelView("front_office_flights.jsp");
@@ -101,16 +101,16 @@ public class FrontOfficeController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/form_passport")
+    @Get
+    @Url("/form_passport")
     public ModelView formPassport() {
         ModelView mv = new ModelView("upload-form.jsp");
         return mv;
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/upload_passport")
-    public ModelView uploadPassport(@AnnotationFileUpload("passport_image") FileUpload file) {
+    @Post
+    @Url("/upload_passport")
+    public ModelView uploadPassport(@Upload("passport_image") FileUpload file) {
         ModelView mv = new ModelView("result-upload.jsp");
 
         // file type
@@ -137,8 +137,8 @@ public class FrontOfficeController {
         }
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/form_reservation")
+    @Get
+    @Url("/form_reservation")
     public ModelView formReservation() {
         try (Connection connection = new Database().getConnection()) {
             ModelView mv = new ModelView("form-reservation.jsp");
@@ -156,8 +156,8 @@ public class FrontOfficeController {
         }
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/list_reservation")
+    @Post
+    @Url("/list_reservation")
     public ModelView listReservation() {
         try (Connection connection = new Database().getConnection()) {
             ModelView mv = new ModelView("list-reservation.jsp");
@@ -191,18 +191,18 @@ public class FrontOfficeController {
         }
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/flight_reservation")
+    @Post
+    @Url("/flight_reservation")
     public ModelView flightReservation(
-        @AnnotationRequestParam(name = "flight") Integer idFlight,
-        @AnnotationRequestParam(name = "seatCategorie") String categorie,
-        @AnnotationRequestParam(name = "reservation_time") Timestamp reservationTime,
-        @AnnotationRequestParam(name = "nbr_billet_total") Integer nbrBilletTotal,
-        @AnnotationRequestParam(name = "nbr_billet_enfant") Integer nbrBilletEnfant,
-        @AnnotationRequestParam(name = "nbr_billet_adulte") Integer nbrBilletAdulte,
-        @AnnotationRequestParam(name = "name_voyageur") String nameVoyageur,
-        @AnnotationRequestParam(name = "dtn_voyageur") Date dtnVoyageur,
-        @AnnotationFileUpload("passport_image") FileUpload passportFile
+        @RequestParam(name = "flight") Integer idFlight,
+        @RequestParam(name = "seatCategorie") String categorie,
+        @RequestParam(name = "reservation_time") Timestamp reservationTime,
+        @RequestParam(name = "nbr_billet_total") Integer nbrBilletTotal,
+        @RequestParam(name = "nbr_billet_enfant") Integer nbrBilletEnfant,
+        @RequestParam(name = "nbr_billet_adulte") Integer nbrBilletAdulte,
+        @RequestParam(name = "name_voyageur") String nameVoyageur,
+        @RequestParam(name = "dtn_voyageur") Date dtnVoyageur,
+        @Upload("passport_image") FileUpload passportFile
     ) {
         try (Connection connection = new Database().getConnection()) {
             int idClient = (int) session.get("connected_client");

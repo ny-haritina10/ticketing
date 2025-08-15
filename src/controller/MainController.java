@@ -5,20 +5,20 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import annotation.AnnotationController;
-import annotation.AnnotationGetMapping;
-import annotation.AnnotationURL;
+import annotation.Controller;
+import annotation.Get;
+import annotation.Url;
 import database.Database;
 import model.Flight;
 import model.SeatPrice;
 import modelview.ModelView;
 import service.FlightService;
 
-@AnnotationController(name = "main_controller")
+@Controller(name = "main_controller")
 public class MainController {
     
-    @AnnotationGetMapping
-    @AnnotationURL("/main")
+    @Get
+    @Url("/main")
     public ModelView test() {
         ModelView mv = new ModelView("test.jsp");
         try (Connection connection = new Database().getConnection()) {

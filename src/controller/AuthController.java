@@ -2,11 +2,11 @@ package controller;
 
 import java.sql.Connection;
 
-import annotation.AnnotationController;
-import annotation.AnnotationGetMapping;
-import annotation.AnnotationModelAttribute;
-import annotation.AnnotationPostMapping;
-import annotation.AnnotationURL;
+import annotation.Controller;
+import annotation.Get;
+import annotation.ModelAttribute;
+import annotation.Post;
+import annotation.Url;
 import database.Database;
 import mg.jwe.orm.criteria.Criterion;
 import model.Admin;
@@ -16,14 +16,14 @@ import service.AdminService;
 import session.Session;
 import validation.Valid;
 
-@AnnotationController(name = "auth_controller")
+@Controller(name = "auth_controller")
 public class AuthController {
     
     private Session session;
 
-    @AnnotationPostMapping
-    @AnnotationURL("/admin_login")
-    public ModelView adminLogin(@Valid @AnnotationModelAttribute("admin") Admin admin) {
+    @Post
+    @Url("/admin_login")
+    public ModelView adminLogin(@Valid @ModelAttribute("admin") Admin admin) {
 
         try (Connection connection = new Database().getConnection()){
             boolean auth = AdminService.auth(connection, admin);
@@ -57,16 +57,16 @@ public class AuthController {
         return null;
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/logout")
+    @Get
+    @Url("/logout")
     public ModelView logout() {
         // clear login session
         session.logout();
         return new ModelView("index.jsp");
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/admin")
+    @Get
+    @Url("/admin")
     public ModelView dashboard() {
         ModelView mv = new ModelView("main.jsp");
 
@@ -77,16 +77,16 @@ public class AuthController {
         return mv;
     }
 
-    @AnnotationGetMapping
-    @AnnotationURL("/login_client")
+    @Get
+    @Url("/login_client")
     public ModelView loginClient() {
         ModelView mv = new ModelView("front-office.jsp");
         return mv;
     }
 
-    @AnnotationPostMapping
-    @AnnotationURL("/client_login")
-    public ModelView authLogin(@AnnotationModelAttribute(value = "client") Client client) {
+    @Post
+    @Url("/client_login")
+    public ModelView authLogin(@ModelAttribute(value = "client") Client client) {
         try (Connection connection = new Database().getConnection()){
             // boolean auth = ClientService.auth(connection, client);
             boolean auth = true;
