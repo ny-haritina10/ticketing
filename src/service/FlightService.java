@@ -1,17 +1,16 @@
 package service;
 
-import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
 import mg.jwe.orm.criteria.Criterion;
 import model.Flight;
 import model.FlightPromotion;
-import model.Reservation;
 import model.SeatPrice;
 
 public class FlightService {
@@ -36,9 +35,12 @@ public class FlightService {
                     double basePrice = resultSet.getDouble("base_price");
                     double discountPercentage = resultSet.getDouble("discount_percentage");
 
-                    double finalPrice = basePrice * (1 - discountPercentage / 100);
-
+                    //double finalPrice = basePrice * (1 - discountPercentage / 100);
+                    double finalPrice = discountPercentage;
                     SeatPrice seatPrice = new SeatPrice(category, basePrice, discountPercentage, finalPrice);
+
+                    System.out.println("###### category: " + category);
+                    System.out.println("###### seatPrice: " + seatPrice.getFinalPrice());
                     seatPrices.put(category, seatPrice);
                 }
             }

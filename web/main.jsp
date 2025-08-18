@@ -367,31 +367,48 @@
             <span>Dashboard</span>
           </a>
         </li>
-    
+
         <!-- Flights -->
         <li class="sidebar-item">
           <a href="${pageContext.request.contextPath}/list" class="sidebar-link ${activePage == 'list_flight' ? 'active' : ''}">
-            <i class="fas fa-plane"></i> <!-- Changed to a plane icon -->
+            <i class="fas fa-plane"></i>
             <span>Flights</span>
           </a>
         </li>
-    
+
         <!-- Promotions -->
         <li class="sidebar-item">
           <a href="${pageContext.request.contextPath}/list_promotions" class="sidebar-link ${activePage == 'list_promotions' ? 'active' : ''}">
-            <i class="fas fa-percent"></i> <!-- Changed to a percent icon for promotions -->
+            <i class="fas fa-percent"></i>
             <span>Promotions</span>
           </a>
         </li>
-    
+
         <!-- Reservations -->
         <li class="sidebar-item">
           <a href="${pageContext.request.contextPath}/list_reservations_setting" class="sidebar-link ${activePage == 'list_reservations_setting' ? 'active' : ''}">
-            <i class="fas fa-calendar-check"></i> <!-- Changed to a calendar check icon for reservations -->
+            <i class="fas fa-calendar-check"></i>
             <span>Reservations</span>
           </a>
         </li>
+
+        <!-- Manage Unbooked Seats -->
+        <li class="sidebar-item">
+          <a href="${pageContext.request.contextPath}/manage_seat_form" class="sidebar-link ${activePage == 'manage_seats_form' ? 'active' : ''}">
+            <i class="fas fa-chair"></i> <!-- seat icon -->
+            <span>Manage Unbooked Seats</span>
+          </a>
+        </li>
+
+        <!-- Unbooked Seats Statistics -->
+        <li class="sidebar-item">
+          <a href="${pageContext.request.contextPath}/stats_seat" class="sidebar-link ${activePage == 'manage_seats_stats' ? 'active' : ''}">
+            <i class="fas fa-chart-bar"></i> <!-- stats icon -->
+            <span>Unbooked Seats Statistics</span>
+          </a>
+        </li>
       </ul>
+
     
       <!-- Logout -->
       <div class="sidebar-footer">

@@ -14,12 +14,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Front-Office | Ticketing App</title>
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts - Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
+  <title>Front-Office | Your Reservations</title>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts - Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
       :root {
         --primary-color: #3f51b5;
         --primary-light: #757de8;
@@ -194,6 +194,27 @@
     <div class="reservation-card">
       <h2>Flight: <%= reservation.getFlight().getFlightNumber() %></h2>
       <p>Reservation Time: <%= dateFormat.format(reservation.getReservationTime()) %></p>
+      
+      <!-- ==================== NEW SECTION: PAYMENT STATUS & ACTION ==================== -->
+      <div>
+        <strong>Payment Status:</strong>
+        <% if ("paid".equalsIgnoreCase(reservation.getPaymentStatus())) { %>
+          <span style="color: green; font-weight: bold;">
+            Paid on <%= dateFormat.format(reservation.getPaymentTime()) %>
+          </span>
+        <% } else { %>
+          <span style="color: orange; font-weight: bold; text-transform: capitalize;">
+            <%= reservation.getPaymentStatus() %>
+          </span>
+          <!-- "Pay" Button Form -->
+          <form action="pay_reservation" method="post" style="display: inline; margin-left: 20px;">
+            <input type="hidden" name="reservationId" value="<%= reservation.getId() %>">
+            <button type="submit">Pay</button>
+          </form>
+        <% } %>
+      </div>
+      <!-- ================================= END NEW SECTION ================================= -->
+      
       <p>Total Tickets: <%= reservation.getNbrBilletTotal() %></p>
       <p>Adult Tickets: <%= reservation.getNbrBilletAdulte() %></p>
       <p>Child Tickets: <%= reservation.getNbrBilletEnfant() %></p>

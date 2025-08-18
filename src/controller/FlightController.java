@@ -23,6 +23,7 @@ import model.FlightPromotion;
 import model.FlightReservation;
 import model.Plane;
 import modelview.ModelView;
+import service.PromotionalSeatsService;
 
 @AuthController(roles = { Admin.class })  
 @Controller(name = "flight_controller")
@@ -306,26 +307,34 @@ public class FlightController {
         @RequestParam(name = "flight") Integer flightId,
         @RequestParam(name = "category") String category,
         @RequestParam(name = "discountPercentage") double discountPercentage,
-        @RequestParam(name = "seatsAvailable") Integer seatsAvailable
+        @RequestParam(name = "seatsAvailable") Integer seatsAvailable,
+        @RequestParam(name = "datePromotion") String datePromotion   
     ) {
         try (Connection connection = new Database().getConnection()) {
             Flight flight = Flight.findById(connection, Flight.class, flightId);
-            
             FlightPromotion promotion = new FlightPromotion();
 
             promotion.setFlight(flight);
             promotion.setCategory(category);
             promotion.setDiscountPercentage(new BigDecimal(discountPercentage));
             promotion.setSeatsAvailable(seatsAvailable);
-            
+
+            if (datePromotion != null && !datePromotion.isEmpty()) {
+                promotion.setDatePromotion(java.sql.Date.valueOf(datePromotion));
+            }
+
             promotion.save(connection);
+
+            int idPromotion = FlightPromotion.getLastInserted(connection, FlightPromotion.class).getId();
+            PromotionalSeatsService.ajouterToNewProm(connection, flightId, category, idPromotion);
             
             return listPromotions(); 
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-    }   
+    }
+ 
 
     @Get
     @Url("/list_promotions")

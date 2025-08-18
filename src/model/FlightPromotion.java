@@ -2,7 +2,10 @@ package model;
 
 import java.math.BigDecimal;
 
-import mg.jwe.orm.annotations.*;
+import mg.jwe.orm.annotations.Column;
+import mg.jwe.orm.annotations.ForeignKey;
+import mg.jwe.orm.annotations.Id;
+import mg.jwe.orm.annotations.Table;
 import mg.jwe.orm.base.BaseModel;
 
 @Table(name = "flight_promotions")
@@ -23,6 +26,18 @@ public class FlightPromotion extends BaseModel {
 
     @Column(name = "seats_available")
     private Integer seatsAvailable;
+
+    @Column(name = "date_promotion")
+    private java.sql.Date datePromotion;
+
+    public java.sql.Date getDatePromotion() {
+        return datePromotion;
+    }
+
+    public void setDatePromotion(java.sql.Date datePromotion) {
+        this.datePromotion = datePromotion;
+    }
+
 
     public Integer getId() {
         return id;

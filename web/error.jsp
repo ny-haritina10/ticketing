@@ -13,7 +13,7 @@
       padding: 50px;
     }
     .container {
-      max-width: 400px;
+      max-width: 1200px;
       margin: auto;
       background: white;
       padding: 20px;

@@ -26,13 +26,18 @@
   </select>
   <br>
 
-  <p>Discount Percentage (%):</p>
+  <p>New Promotional Price:</p>
   <input type="number" name="discountPercentage" id="discountPercentage" required>
   <br>
 
   <p>Seats Available:</p>
   <input type="number" name="seatsAvailable" id="seatsAvailable" required>
   <br>
+
+  <p>Promotion Date:</p>
+  <input type="date" name="datePromotion" id="datePromotion" required>
+  <br>
+
 
   <input type="submit" value="Create Promotion">
 </form>

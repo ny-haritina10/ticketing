@@ -1,8 +1,12 @@
 package model;
 
-import mg.jwe.orm.annotations.*;
-import mg.jwe.orm.base.BaseModel;
 import java.sql.Timestamp;
+
+import mg.jwe.orm.annotations.Column;
+import mg.jwe.orm.annotations.ForeignKey;
+import mg.jwe.orm.annotations.Id;
+import mg.jwe.orm.annotations.Table;
+import mg.jwe.orm.base.BaseModel;
 
 @Table(name = "reservations")
 public class Reservation extends BaseModel {
@@ -28,6 +32,15 @@ public class Reservation extends BaseModel {
 
     @Column(name = "nbr_billet_adulte")
     private Integer nbrBilletAdulte;
+
+    // --- NEW COLUMNS ---
+    @Column(name = "payment_status")
+    private String paymentStatus;
+
+    @Column(name = "payment_time")
+    private Timestamp paymentTime;
+    
+    // --- END NEW COLUMNS ---
 
     // Getters and Setters
     public Integer getId() {
@@ -85,4 +98,22 @@ public class Reservation extends BaseModel {
     public void setNbrBilletAdulte(Integer nbrBilletAdulte) {
         this.nbrBilletAdulte = nbrBilletAdulte;
     }
+    
+    // --- GETTERS AND SETTERS FOR NEW COLUMNS ---
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public Timestamp getPaymentTime() {
+        return paymentTime;
+    }
+
+    public void setPaymentTime(Timestamp paymentTime) {
+        this.paymentTime = paymentTime;
+    }
+    // --- END GETTERS AND SETTERS FOR NEW COLUMNS ---
 }

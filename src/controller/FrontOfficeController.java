@@ -13,12 +13,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import annotation.Url;
 import annotation.Controller;
 import annotation.Get;
 import annotation.Post;
 import annotation.RequestParam;
 import annotation.Upload;
+import annotation.Url;
 import database.Database;
 import mg.jwe.orm.criteria.Criterion;
 import model.City;
@@ -156,7 +156,7 @@ public class FrontOfficeController {
         }
     }
 
-    @Post
+    @Get
     @Url("/list_reservation")
     public ModelView listReservation() {
         try (Connection connection = new Database().getConnection()) {
@@ -211,28 +211,26 @@ public class FrontOfficeController {
 
             // Create main reservation
             Reservation reservation = new Reservation();
-
             reservation.setFlight(flight);
             reservation.setClient(client);
             reservation.setReservationTime(reservationTime);
-            reservation.setNbrBilletTotal(nbrBilletTotal);
-            reservation.setNbrBilletEnfant(nbrBilletEnfant);
-            reservation.setNbrBilletAdulte(nbrBilletAdulte);
+            reservation.setNbrBilletTotal(1);
+            reservation.setNbrBilletEnfant(0);
+            reservation.setNbrBilletAdulte(1);
+            reservation.setPaymentStatus("pending");
             reservation.save(connection);
 
-            // Handle passport image
             String relativePath = "uploads/" + UUID.randomUUID().toString() + "_" + passportFile.getFileName();
-            String savedPath = PATH + "/" + relativePath;
             passportFile.saveToDirectory(PATH);
 
-            // Calculate price and check for promotions
             boolean isPromotional = FlightService.isSeatCategoryPromotional(connection, flight, categorie, reservationTime);
-            Map<String, SeatPrice> prices = FlightService.calculateSeatPrices(connection, flight.getId(), 
-                new String[] { categorie });
+            
+            Map<String, SeatPrice> prices = FlightService.calculateSeatPrices(connection, flight.getId(), new String[] { categorie });
             double finalPrice = prices.get(categorie).getFinalPrice();
 
-            // Create reservation detail
             ReservationDetail detail = new ReservationDetail();
+            int idRes = Reservation.getLastInserted(connection, Reservation.class).getId();
+            reservation.setId(idRes);
             
             detail.setReservation(reservation);
             detail.setSeatCategory(categorie);
@@ -240,7 +238,7 @@ public class FrontOfficeController {
             detail.setDtnVoyageur(dtnVoyageur);
             detail.setPassportImage(relativePath);
             detail.setPrice(new BigDecimal(finalPrice));
-            detail.setIsPromotional(isPromotional);
+            detail.setIsPromotional(isPromotional); // Set this correctly
             detail.setIsCancel(false);
             detail.setCancellationTime(null);
 
@@ -252,4 +250,31 @@ public class FrontOfficeController {
             return null;
         }
     }
+
+    @Post
+    @Url("/pay_reservation")
+    public ModelView payReservation(@RequestParam(name = "reservationId") Integer reservationId) {
+        try (Connection connection = new Database().getConnection()) {
+            Reservation reservation = Reservation.findById(connection, Reservation.class, reservationId);
+
+            if (reservation != null) {
+                reservation.setPaymentStatus("paid");
+                reservation.setPaymentTime(new Timestamp(System.currentTimeMillis()));
+                
+                reservation.update(connection);
+            } else {
+                System.out.println("Payment failed: Reservation with ID " + reservationId + " not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return listReservation();
+    }
 }
+
+
+// mi annuler res non paye au deal date butoire
+// leh res annulle 
+    // if meme vol, meme cat le lendemain
+        // cumulena any leh siege

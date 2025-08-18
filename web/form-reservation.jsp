@@ -210,21 +210,6 @@
       </select>
 
       <div class="form-group">
-        <label for="nbr_billet_total">Total Tickets:</label>
-        <input type="number" name="nbr_billet_total" id="nbr_billet_total" required min="1">
-      </div>
-
-      <div class="form-group">
-        <label for="nbr_billet_enfant">Child Tickets:</label>
-        <input type="number" name="nbr_billet_enfant" id="nbr_billet_enfant" required min="0">
-      </div>
-
-      <div class="form-group">
-        <label for="nbr_billet_adulte">Adult Tickets:</label>
-        <input type="number" name="nbr_billet_adulte" id="nbr_billet_adulte" required min="1">
-      </div>
-
-      <div class="form-group">
         <label for="name_voyageur">Passenger Name:</label>
         <input type="text" name="name_voyageur" id="name_voyageur" required>
       </div>
